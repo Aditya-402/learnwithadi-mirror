@@ -1,0 +1,168 @@
+/* Learn AI by Building — shared site styles (masthead brand row, auth chip, nav, references, journey) */
+/* Chapter pages carry their own full stylesheets; this file only adds the shared chrome. */
+
+:root{
+  --lwa-ground:#faf6ee; --lwa-panel:#ffffff; --lwa-subtle:#f3ece0; --lwa-ink:#2b2730;
+  --lwa-muted:#6a626e; --lwa-line:#e9dfcf; --lwa-accent:#5a3d5c; --lwa-accent-deep:#3f2a41;
+  --lwa-accent-wash:#f1e7ef; --lwa-slate:#554b58;
+  --lwa-serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+  --lwa-sans:'Segoe UI Variable Text','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --lwa-mono:'Cascadia Code','Consolas','SF Mono',ui-monospace,monospace;
+}
+
+/* ---------- brand row (used inside each page's masthead) ---------- */
+.lwa-brandrow{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.lwa-brandrow .lwa-home{display:inline-flex;align-items:center;text-decoration:none;border:none}
+.lwa-brandrow .lwa-home img{height:46px;width:auto;display:block}
+.lwa-brand-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.lwa-tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lwa-muted);font-weight:600}
+.lwa-tag a{color:var(--lwa-accent);text-decoration:none}
+.lwa-tag a:hover{text-decoration:underline}
+
+/* ---------- auth chip ---------- */
+.lwa-auth{display:inline-flex;align-items:center;gap:8px;font-family:var(--lwa-sans);font-size:12.5px}
+.lwa-auth button{cursor:pointer;font:inherit;border:1px solid var(--lwa-line);background:var(--lwa-panel);
+  color:var(--lwa-ink);border-radius:999px;padding:6px 14px;display:inline-flex;align-items:center;gap:7px;
+  transition:border-color .15s, box-shadow .15s}
+.lwa-auth button:hover{border-color:var(--lwa-accent);box-shadow:0 1px 4px rgba(90,61,92,.15)}
+.lwa-auth .lwa-user{display:inline-flex;align-items:center;gap:8px;color:var(--lwa-muted)}
+.lwa-auth .lwa-user img{width:22px;height:22px;border-radius:50%;display:block}
+.lwa-auth .lwa-sync{font-size:11px;color:var(--lwa-muted)}
+.lwa-auth .lwa-signout{border:none;background:none;color:var(--lwa-muted);text-decoration:underline;padding:0}
+
+/* ---------- chapter progress bar (fixed top) ---------- */
+.lwa-readbar{position:fixed;top:0;left:0;height:3px;background:var(--lwa-accent);width:0;z-index:99;transition:width .1s linear}
+
+/* ---------- prev/next chapter nav ---------- */
+.lwa-chapnav{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:34px 0 6px;font-family:var(--lwa-sans)}
+.lwa-chapnav a,.lwa-chapnav button{flex:1;min-width:220px;text-decoration:none;cursor:pointer;font:inherit;
+  border:1px solid var(--lwa-line);background:var(--lwa-panel);border-radius:12px;padding:14px 18px;color:var(--lwa-ink);
+  transition:border-color .15s, box-shadow .15s;text-align:left}
+.lwa-chapnav a:hover,.lwa-chapnav button:hover{border-color:var(--lwa-accent);box-shadow:0 2px 8px rgba(90,61,92,.12)}
+.lwa-chapnav .k{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lwa-muted);margin-bottom:4px}
+.lwa-chapnav .t{font-weight:600;font-size:14.5px}
+.lwa-chapnav .lwa-complete{text-align:center;background:var(--lwa-accent-wash);border-color:#d9c6d7}
+.lwa-chapnav .lwa-complete.is-done{background:#e4ede6;border-color:#9ec8c6;color:#2f5a45}
+
+/* ---------- references ---------- */
+.lwa-refs{margin-top:8px}
+.lwa-refs ol{margin:12px 0 0;padding-left:22px}
+.lwa-refs li{margin:9px 0;font-size:14px;line-height:1.55;color:var(--lwa-slate)}
+.lwa-refs li.hero{font-size:14.5px;color:var(--lwa-ink)}
+.lwa-refs li .why{color:var(--lwa-muted);font-size:13px}
+.lwa-refs a{color:var(--lwa-accent)}
+
+/* ---------- course / catalog cards (home + hub pages) ---------- */
+.lwa-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.lwa-card{background:var(--lwa-panel);border:1px solid var(--lwa-line);border-radius:14px;padding:20px 22px;
+  display:flex;flex-direction:column;gap:8px;position:relative;transition:border-color .15s, box-shadow .15s}
+a.lwa-card{text-decoration:none;color:inherit}
+a.lwa-card:hover{border-color:var(--lwa-accent);box-shadow:0 3px 14px rgba(90,61,92,.13)}
+.lwa-card .k{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--lwa-muted);font-weight:600}
+.lwa-card h3{margin:0;font-family:var(--lwa-serif);font-size:20px;color:var(--lwa-ink)}
+.lwa-card p{margin:0;font-size:13.5px;line-height:1.55;color:var(--lwa-slate)}
+.lwa-card .meta{margin-top:auto;padding-top:10px;font-size:12px;color:var(--lwa-muted);display:flex;gap:12px;flex-wrap:wrap}
+.lwa-card.soon{opacity:.72;background:var(--lwa-subtle)}
+.lwa-card .badge{position:absolute;top:16px;right:16px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--lwa-accent-wash);color:var(--lwa-accent-deep);border-radius:999px;padding:3px 10px;font-weight:700}
+.lwa-card.soon .badge{background:#f2ebe0;color:var(--lwa-muted)}
+.lwa-card .pbar{height:5px;border-radius:99px;background:var(--lwa-subtle);overflow:hidden;margin-top:6px}
+.lwa-card .pbar i{display:block;height:100%;background:var(--lwa-accent);border-radius:99px}
+
+/* ---------- hub: start button + series progress ---------- */
+.lwa-start{display:inline-flex;align-items:center;gap:9px;background:var(--lwa-accent);color:#fff;
+  border:1px solid var(--lwa-accent);border-radius:11px;padding:12px 22px;font-size:15px;font-weight:600;
+  text-decoration:none;transition:background .15s,box-shadow .15s}
+.lwa-start:hover{background:var(--lwa-accent-deep);box-shadow:0 3px 12px rgba(90,61,92,.25)}
+.lwa-startrow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:18px 0 4px}
+.lwa-seriesbar{min-width:220px;flex:1;max-width:420px}
+.lwa-seriesbar .pbar{height:7px;border-radius:99px;background:var(--lwa-subtle);overflow:hidden;
+  border:1px solid var(--lwa-line)}
+.lwa-seriesbar .pbar i{display:block;height:100%;background:var(--lwa-accent);border-radius:99px;transition:width .3s}
+.lwa-seriesbar .meta{font-size:12px;color:var(--lwa-muted);margin-top:6px}
+
+/* level colour so twenty rows aren't one grey wall */
+.lwa-chaprows.lvl-beginner .lwa-chaprow{border-left:3px solid #2f5a45}
+.lwa-chaprows.lvl-inter    .lwa-chaprow{border-left:3px solid var(--lwa-accent)}
+.lwa-chaprows.lvl-advanced .lwa-chaprow{border-left:3px solid #a8441f}
+.lwa-chaprows.lvl-bridge   .lwa-chaprow{border-left:3px solid #80590f}
+.lvl .badge.b-beginner{background:#e4ede6;color:#1d5654}
+.lvl .badge.b-inter{background:var(--lwa-accent-wash);color:var(--lwa-accent-deep)}
+.lvl .badge.b-advanced{background:#f8e6dc;color:#7c4324}
+.lvl .badge.b-bridge{background:#f8ecd3;color:#6d5615}
+
+/* chapter rows on hub page */
+.lwa-chaprows{display:flex;flex-direction:column;gap:10px}
+.lwa-chaprow{display:flex;align-items:center;gap:16px;background:var(--lwa-panel);border:1px solid var(--lwa-line);
+  border-radius:12px;padding:14px 18px;text-decoration:none;color:inherit;transition:border-color .15s, box-shadow .15s}
+.lwa-chaprow:hover{border-color:var(--lwa-accent);box-shadow:0 2px 8px rgba(90,61,92,.12)}
+.lwa-chaprow .num{font-family:var(--lwa-serif);font-size:22px;color:var(--lwa-accent);min-width:34px;text-align:center}
+.lwa-chaprow .body{flex:1}
+.lwa-chaprow .body b{display:block;font-size:15px;color:var(--lwa-ink)}
+.lwa-chaprow .body span{font-size:12.5px;color:var(--lwa-muted)}
+.lwa-chaprow .st{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--lwa-muted);white-space:nowrap}
+.lwa-chaprow .st.done{color:#2f5a45}
+.lwa-chaprow .st.started{color:var(--lwa-accent)}
+.lwa-chaprow.soon{opacity:.6;pointer-events:none;background:var(--lwa-subtle)}
+
+/* ---------- the pathway (staged ladder on the home page) ---------- */
+.lwa-path{margin:6px 0 4px}
+.lwa-path .h{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--lwa-muted);font-weight:700;margin-bottom:12px}
+.lwa-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:22px}
+.lwa-step{position:relative;padding:13px 14px 14px;
+  background:var(--lwa-panel);border:1px solid var(--lwa-line);border-radius:12px;
+  text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:4px}
+/* the connector between stages */
+.lwa-step:not(:last-child)::after{content:"";position:absolute;right:-22px;top:50%;width:22px;height:1.5px;
+  background:linear-gradient(90deg,var(--lwa-line),#dccbda)}
+.lwa-step .n{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--lwa-muted)}
+.lwa-step .t{font-family:var(--lwa-serif);font-size:14.5px;line-height:1.25;color:var(--lwa-ink)}
+.lwa-step .s{font-size:11.5px;color:var(--lwa-muted);margin-top:auto;padding-top:4px}
+.lwa-step.live{border-color:#d6c2d4;background:linear-gradient(var(--lwa-panel),var(--lwa-accent-wash))}
+.lwa-step.live .n,.lwa-step.live .s{color:var(--lwa-accent-deep)}
+.lwa-step.live .s{font-weight:700}
+a.lwa-step:hover{border-color:var(--lwa-accent);box-shadow:0 2px 10px rgba(90,61,92,.13)}
+.lwa-step.here{box-shadow:0 0 0 3px color-mix(in srgb,var(--lwa-accent) 18%,transparent)}
+.lwa-path .foot{font-size:12.5px;color:var(--lwa-muted);margin-top:11px;max-width:760px}
+@media (max-width:1000px){
+  .lwa-steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .lwa-step:not(:last-child)::after{display:none}
+}
+@media (max-width:620px){ .lwa-steps{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+/* planned/secondary series row — smaller than live cards */
+.lwa-cards.planned{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:2px}
+.lwa-cards.planned .lwa-card{padding:14px 16px;gap:5px}
+.lwa-cards.planned .lwa-card h3{font-size:16px}
+.lwa-cards.planned .lwa-card p{font-size:12.5px}
+.lwa-cards.planned .lwa-card .badge{display:none}
+h3.sub{font-family:var(--lwa-sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--lwa-muted);font-weight:700;margin:26px 0 10px}
+
+/* journey strip */
+.lwa-journey{background:var(--lwa-panel);border:1px solid var(--lwa-line);border-radius:14px;padding:18px 22px;font-family:var(--lwa-sans)}
+.lwa-journey .h{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--lwa-muted);font-weight:700;margin-bottom:8px}
+.lwa-journey .row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--lwa-slate)}
+.lwa-journey a{color:var(--lwa-accent);font-weight:600;text-decoration:none}
+.lwa-journey a:hover{text-decoration:underline}
+
+@media (max-width:640px){ .lwa-brand-right{width:100%;justify-content:space-between} }
+
+/* ---------- the landing page (10 Oct 2026): charcoal top bar, the motto, the section tiles ---------- */
+header.top{background:#3a1620;border-bottom:0}   /* maroon, matching the YouTube banner (10 Oct 2026) */
+header.top .lwa-auth button{background:transparent;color:#faf6ee;border-color:rgba(250,246,238,.35)}
+header.top .lwa-auth button:hover{border-color:#e3a63a;box-shadow:none}
+.hero .crumb{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--lwa-accent);margin-bottom:6px}
+.hero .crumb a{color:inherit;text-decoration:none}
+.doors{margin:8px 0 38px}
+.doors .h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--lwa-muted);margin-bottom:12px}
+.door-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.door{position:relative;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--lwa-ink);background:#fff;
+  border:1px solid var(--lwa-line);border-radius:16px;padding:18px 18px 16px;border-top:5px solid var(--c);min-height:190px;transition:transform .15s,box-shadow .15s}
+a.door:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(43,39,48,.10)}
+.door .ic{width:40px;height:40px;color:var(--c)} .door h3{font:600 20px var(--lwa-serif);margin:4px 0 0}
+.door p{font-size:13.5px;color:var(--lwa-muted);margin:0;flex:1} .door .st{font-size:12px;font-weight:700;color:var(--c)}
+.door .go{position:absolute;right:16px;bottom:12px;font-size:20px;color:var(--c)}
+.door.soon{opacity:.62;border-top-style:dashed}
+.door.plum{--c:#5a3d5c}.door.terracotta{--c:#a8441f}.door.forest{--c:#2f5a45}.door.mustard{--c:#80590f}
+@media(max-width:1000px){.door-grid{grid-template-columns:repeat(2,1fr)}} @media(max-width:560px){.door-grid{grid-template-columns:1fr}}

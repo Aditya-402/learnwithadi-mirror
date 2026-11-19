@@ -1,0 +1,483 @@
+/* Learn AI by Building — in-page Python practice runner (Pyodide).
+   Zero-install: real CPython compiled to WebAssembly, loaded lazily from the
+   jsDelivr CDN the first time a student presses Run (≈6 MB, cached after that).
+
+   Execution happens in a Web Worker so a runaway loop can never freeze the
+   page: each run has a time budget, and on timeout the worker is terminated
+   (and rebooted lazily on the next Run) with a friendly infinite-loop hint.
+
+   Markup contract — pyrun.js enhances every  <div class="pyrun">…</div>  block:
+
+     <div class="pyrun"
+          data-id="p3"                 (optional — stable id for the solved-tick;
+                                        defaults to its index on the page)
+          data-expect="Hello, Ada"     (optional — expected stdout enables the
+                                        ✓ Check button; "\n" splits lines)
+          data-stdin="Ada"             (optional — shows a "program input" box,
+                                        one line per input() call; "\n" splits)
+          data-stdin-lock              (optional — input box read-only, so checks
+                                        can't be dodged by editing the input)>
+       <textarea spellcheck="false">print("Hello")</textarea>
+     </div>
+
+   input() without data-stdin is interactive (20 Oct 2026, for the Python course): when the
+   program asks, the output shows the prompt and a box to type in; Enter runs the program
+   again from the top with the answers so far ("ask, then replay"). It needs no special
+   server headers, so it works on GitHub Pages and next to YouTube embeds. The pause is a
+   BaseException, so a learner's own `except Exception:` never swallows it, and random is
+   seeded once per run so a replay gives the same numbers. Blocks WITH data-stdin keep their
+   fixed answers, so checked exercises behave exactly as before.
+
+   Solved state is stored per unit in localStorage under
+   "lwa-pyrun::<course>::<chapter>" and re-rendered on load. */
+(function () {
+  "use strict";
+
+  var PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js";
+  var INDEX_URL = PYODIDE_URL.replace(/pyodide\.js$/, "");
+  var RUN_TIMEOUT_MS = 12000;   // per-run budget once Python is booted
+  var BOOT_TIMEOUT_MS = 120000; // download + boot budget (slow connections)
+
+  var body = document.body;
+  var COURSE = body.getAttribute("data-lwa-course") || "any";
+  var UNIT = body.getAttribute("data-lwa-chapter") || "any";
+  var LS_KEY = "lwa-pyrun::" + COURSE + "::" + UNIT;
+
+  var blocks = [].slice.call(document.querySelectorAll(".pyrun"));
+  if (!blocks.length) return;
+
+  /* ---------------- styles ---------------- */
+  var css = "\
+.pyrun{background:var(--panel,#fff);border:1px solid var(--line,#e9dfcf);border-radius:12px;overflow:hidden}\
+.pyrun.ok{border-color:var(--teal,#2f5a45)}\
+.pyrun .pr-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;\
+  border-bottom:1px solid var(--line,#e9dfcf);background:var(--subtle,#f3ece0)}\
+.pyrun .pr-bar .sp{flex:1}\
+.pyrun .pr-btn{font:inherit;font-size:var(--fs-sm,13px);font-weight:600;cursor:pointer;\
+  border:1px solid var(--line,#e9dfcf);border-radius:8px;padding:6px 14px;\
+  background:var(--panel,#fff);color:var(--ink,#2b2730);transition:border-color .15s}\
+.pyrun .pr-btn:hover{border-color:var(--accent,#5a3d5c)}\
+.pyrun .pr-btn.run{background:var(--accent,#5a3d5c);border-color:var(--accent,#5a3d5c);color:#fff}\
+.pyrun .pr-btn.run:hover{background:var(--accent-deep,#3f2a41)}\
+.pyrun .pr-btn:disabled{opacity:.45;cursor:default}\
+.pyrun .pr-st{font-size:var(--fs-xs,12px);color:var(--muted,#6a626e)}\
+.pyrun .pr-st.ok{color:var(--teal,#2f5a45);font-weight:700}\
+.pyrun .pr-st.no{color:var(--clay,#a8441f);font-weight:700}\
+.pyrun textarea{display:block;width:100%;border:none;border-radius:0;background:var(--panel,#fff);\
+  font-family:var(--mono,ui-monospace,monospace);font-size:var(--fs-cap,14px);line-height:1.7;\
+  color:var(--ink,#2b2730);padding:14px 16px;resize:vertical;min-height:52px;box-sizing:border-box}\
+.pyrun textarea:focus{outline:none;background:#fefcf7}\
+.pyrun .pr-in{display:flex;align-items:center;gap:10px;padding:8px 16px;\
+  border-top:1px dashed var(--line,#e9dfcf);background:var(--subtle,#f3ece0)}\
+.pyrun .pr-in label{font-size:var(--fs-xs,12px);letter-spacing:.09em;text-transform:uppercase;\
+  font-weight:700;color:var(--muted,#6a626e);white-space:nowrap}\
+.pyrun .pr-in input{flex:1;font-family:var(--mono,ui-monospace,monospace);font-size:var(--fs-sm,13px);\
+  border:1px solid var(--line,#e9dfcf);border-radius:7px;padding:6px 10px;background:var(--panel,#fff);color:var(--ink,#2b2730)}\
+.pyrun .pr-in input:read-only{background:var(--subtle,#f3ece0);color:var(--muted,#6a626e)}\
+.pyrun .pr-out{display:none;border-top:1px solid var(--line,#e9dfcf);background:#23262e;color:#ece4d8;\
+  font-family:var(--mono,ui-monospace,monospace);font-size:var(--fs-sm,13px);line-height:1.65;\
+  padding:12px 16px;white-space:pre-wrap;word-break:break-word;max-height:300px;overflow:auto}\
+.pyrun .pr-out.show{display:block}\
+.pyrun .pr-out .err{color:#ffb3a0}\
+.pyrun .pr-out .hint{color:#9aa3b5;font-style:italic}\
+.pyrun .pr-out img.pr-fig{display:block;max-width:100%;height:auto;margin:10px 0 2px;\
+  background:#fff;border-radius:8px;padding:6px}\
+.pyrun .pr-out.has-fig{max-height:none}\
+.pyrun .pr-out .pr-ask{font:inherit;color:#fff;background:transparent;border:none;\
+  border-bottom:1px dashed #9aa3b5;outline:none;min-width:10ch;padding:0 2px;margin:0}\
+.pyrun .pr-out .pr-ask:focus{border-bottom-color:#e3a63a}\
+";
+  var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+
+  /* ---------------- solved state ---------------- */
+  function loadSolved() { try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch (e) { return {}; } }
+  function saveSolved(o) { try { localStorage.setItem(LS_KEY, JSON.stringify(o)); } catch (e) {} }
+  var solved = loadSolved();
+
+  /* ---------------- worker-based executor ---------------- */
+  var PREAMBLE = [
+    "import builtins, os, sys, random as _lwa_random",
+    "os.environ['MPLBACKEND'] = 'AGG'",   // draw plots to an image buffer, not a canvas
+    "_lwa_stdin = []",
+    "_lwa_interactive = False",
+    "_lwa_waiting = False",
+    // a BaseException, so a learner's `except Exception:` cannot swallow the pause
+    "class _LWAWaitInput(BaseException):",
+    "    pass",
+    "def _lwa_set_stdin(lines, interactive=False, seed=None):",
+    "    global _lwa_stdin, _lwa_interactive, _lwa_waiting",
+    "    _lwa_stdin = [str(x) for x in lines]",
+    "    _lwa_interactive = bool(interactive)",
+    "    _lwa_waiting = False",
+    "    if seed is not None:",
+    "        _lwa_random.seed(seed)",       // same numbers on every replay of one run
+    "_lwa_prompt = ''",
+    "def _lwa_input(prompt=''):",
+    "    global _lwa_waiting, _lwa_prompt",
+    "    if not _lwa_stdin and _lwa_interactive:",
+    // the prompt goes to the page directly: an unfinished line is held back by stdout
+    "        _lwa_prompt = str(prompt)",
+    "        _lwa_waiting = True",
+    "        raise _LWAWaitInput()",
+    "    print(prompt, end='')",
+    "    v = _lwa_stdin.pop(0) if _lwa_stdin else ''",
+    "    print(v)",
+    "    return v",
+    "builtins.input = _lwa_input"
+  ].join("\n");
+
+  /* After a run, hand back any matplotlib figures the student drew as PNGs so
+     the plotting units can show pictures, not just text. */
+  var FIGCODE = [
+    "_lwa_figs = []",
+    "import sys",
+    "if 'matplotlib' in sys.modules:",
+    "    try:",
+    "        import matplotlib.pyplot as _plt, io as _io, base64 as _b64",
+    "        for _n in _plt.get_fignums():",
+    "            _buf = _io.BytesIO()",
+    "            _plt.figure(_n).savefig(_buf, format='png', dpi=110, bbox_inches='tight')",
+    "            _lwa_figs.append(_b64.b64encode(_buf.getvalue()).decode())",
+    "        _plt.close('all')",
+    "    except Exception:",
+    "        pass"
+  ].join("\n");
+
+  var WORKER_SRC = [
+    'importScripts(' + JSON.stringify(PYODIDE_URL) + ');',
+    'var FIGCODE = ' + JSON.stringify(FIGCODE) + ';',
+    'var pyReady = loadPyodide({indexURL:' + JSON.stringify(INDEX_URL) + '}).then(function(py){',
+    '  py.runPython(' + JSON.stringify(PREAMBLE) + ');',
+    '  postMessage({type:"ready"});',
+    '  return py;',
+    '}).catch(function(e){ postMessage({type:"bootfail", err:String(e && e.message || e)}); });',
+    'onmessage = function(ev){',
+    '  var msg = ev.data;',
+    '  pyReady.then(function(py){',
+    '    if (!py) return;',
+    '    var needs = /^[ \\t]*(import|from)[ \\t]+\\w/m.test(msg.code);',
+    '    postMessage({type: needs ? "loading" : "running", id: msg.id});',
+    // a first numpy/pandas download can take a while — it must not eat the run budget
+    '    return Promise.resolve(needs ? py.loadPackagesFromImports(msg.code) : null)',
+    '      .catch(function(){})',
+    '      .then(function(){',
+    '        postMessage({type:"running", id: msg.id});',
+    '        py.globals.get("_lwa_set_stdin")(py.toPy(msg.stdin || []), !!msg.interactive, msg.seed == null ? null : msg.seed);',
+    '        var buf = [];',
+    '        py.setStdout({batched:function(s){ buf.push(s); }});',
+    '        py.setStderr({batched:function(s){ buf.push(s); }});',
+    '        var err = null, figs = [];',
+    // fresh namespace per run so one problem never leaks boxes into the next
+    '        try { py.runPython(msg.code, {globals: py.toPy({})}); }',
+    '        catch (e) { err = String(e && e.message || e); }',
+    // paused at input() with no answer yet: not an error, the page asks and replays
+    '        var needInput = false;',
+    '        try { needInput = !!py.globals.get("_lwa_waiting"); } catch (e) {}',
+    '        if (needInput) { err = null; try { buf.push(String(py.globals.get("_lwa_prompt"))); } catch (e) {} }',
+    '        try {',
+    '          py.runPython(FIGCODE);',
+    '          var fp = py.globals.get("_lwa_figs");',
+    '          if (fp) { figs = fp.toJs(); if (fp.destroy) fp.destroy(); }',
+    '        } catch (e) {}',
+    '        py.setStdout(); py.setStderr();',
+    '        postMessage({type:"result", id: msg.id, ok: !err, text: buf.join("\\n"), err: err, figs: figs, needInput: needInput});',
+    '      });',
+    '  });',
+    '};'
+  ].join("\n");
+
+  var worker = null, workerReady = null, seq = 0, pending = {};
+
+  function killWorker() {
+    if (worker) { try { worker.terminate(); } catch (e) {} }
+    worker = null; workerReady = null;
+    for (var k in pending) { pending[k].reject(new Error("__killed__")); }
+    pending = {};
+  }
+
+  function ensureWorker(onStatus) {
+    if (workerReady) return workerReady;
+    onStatus("Loading Python … first time only (about 6 MB)");
+    workerReady = new Promise(function (resolve, reject) {
+      var blob = new Blob([WORKER_SRC], { type: "application/javascript" });
+      var w = new Worker(URL.createObjectURL(blob));
+      var bootTimer = setTimeout(function () {
+        killWorker();
+        reject(new Error("Python took too long to download. Check your connection and press Run again."));
+      }, BOOT_TIMEOUT_MS);
+      w.onmessage = function (ev) {
+        var m = ev.data || {};
+        if (m.type === "ready") { clearTimeout(bootTimer); worker = w; resolve(w); }
+        else if (m.type === "bootfail") {
+          clearTimeout(bootTimer); killWorker();
+          reject(new Error("Could not start Python: " + m.err));
+        } else if ((m.type === "loading" || m.type === "running") && pending[m.id]) {
+          // downloading numpy/pandas isn't the student's program running:
+          // tell them what's happening and restart the run budget
+          var q = pending[m.id];
+          clearTimeout(q.timer);
+          q.onStatus(m.type === "loading" ? "Fetching the libraries this program imports …" : "Running …");
+          q.timer = setTimeout(q.onTimeout, m.type === "loading" ? BOOT_TIMEOUT_MS : RUN_TIMEOUT_MS);
+        } else if (m.type === "result" && pending[m.id]) {
+          var p = pending[m.id]; delete pending[m.id];
+          clearTimeout(p.timer); p.resolve(m);
+        }
+      };
+      w.onerror = function (e) {
+        clearTimeout(bootTimer); killWorker();
+        reject(new Error("Could not download Python. Check your connection and try again."));
+      };
+    });
+    return workerReady;
+  }
+
+  function runInWorker(code, stdin, onStatus, opts) {
+    opts = opts || {};
+    return ensureWorker(onStatus).then(function (w) {
+      onStatus("Running …");
+      return new Promise(function (resolve, reject) {
+        var id = ++seq;
+        var onTimeout = function () {
+          delete pending[id];
+          killWorker(); // a stuck run can only be stopped by terminating the worker
+          reject(new Error("__timeout__"));
+        };
+        pending[id] = {
+          resolve: resolve,
+          reject: reject,
+          onStatus: onStatus,
+          onTimeout: onTimeout,
+          timer: setTimeout(onTimeout, RUN_TIMEOUT_MS)
+        };
+        w.postMessage({ id: id, code: code, stdin: stdin, interactive: !!opts.interactive, seed: opts.seed == null ? null : opts.seed });
+      });
+    });
+  }
+
+  /* Keep only the traceback lines a beginner can act on: their own frames and
+     the final diagnosis. Interpreter-internal frames are dropped together with
+     the source and caret lines that belong to them, so no orphaned ^^^^ marks
+     are left behind. */
+  var FRAME = /^\s*File "/;
+  var FINAL = /^[A-Za-z_][\w.]*(Error|Exception|Warning|Exit|Interrupt)\b/;
+  var INTERNAL = /File "\/lib\/|_pyodide|pyodide\.|importlib|^\s*exec\(|<frozen /;
+
+  function cleanTraceback(msg) {
+    var lines = String(msg).replace(/\r/g, "").split("\n");
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var L = lines[i];
+      if (INTERNAL.test(L)) {
+        // skip this frame and everything under it until the next frame/diagnosis
+        while (i + 1 < lines.length && !FRAME.test(lines[i + 1]) && !FINAL.test(lines[i + 1])) i++;
+        continue;
+      }
+      out.push(L.replace(/File "<exec>", /g, "").replace(/File "<string>", /g, ""));
+    }
+    return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
+  function normalize(s) {
+    return String(s).replace(/\r/g, "").split("\n")
+      .map(function (l) { return l.replace(/\s+$/, ""); })
+      .join("\n").replace(/\n+$/, "").replace(/^\n+/, "");
+  }
+
+  /* ---------------- enhance each block ---------------- */
+  blocks.forEach(function (box, idx) {
+    var ta = box.querySelector("textarea");
+    if (!ta) return;
+    var id = box.getAttribute("data-id") || ("p" + idx);
+    var expect = box.getAttribute("data-expect");
+    if (expect != null) expect = expect.replace(/\\n/g, "\n");
+    var stdin0 = box.getAttribute("data-stdin");
+    var original = ta.value.replace(/^\n+/, "");
+    ta.value = original;
+    autosize(ta);
+
+    var bar = document.createElement("div");
+    bar.className = "pr-bar";
+    bar.innerHTML =
+      "<button type='button' class='pr-btn run'>&#9654; Run</button>" +
+      (expect != null ? "<button type='button' class='pr-btn chk'>&#10003; Check</button>" : "") +
+      "<button type='button' class='pr-btn rst' title='Restore the starting code'>&#8635; Reset</button>" +
+      "<span class='sp'></span><span class='pr-st'></span>";
+    box.insertBefore(bar, ta);
+
+    var stat = bar.querySelector(".pr-st");
+    var out = document.createElement("div");
+    out.className = "pr-out";
+    box.appendChild(out);
+
+    var stdinInput = null;
+    if (stdin0 != null) {
+      var wrap = document.createElement("div");
+      wrap.className = "pr-in";
+      wrap.innerHTML = "<label>Program input</label>";
+      stdinInput = document.createElement("input");
+      stdinInput.type = "text";
+      stdinInput.value = stdin0.replace(/\\n/g, " ⏎ ");
+      stdinInput.title = "What the program's input() calls receive, in order. ⏎ separates answers.";
+      if (box.hasAttribute("data-stdin-lock")) stdinInput.readOnly = true;
+      wrap.appendChild(stdinInput);
+      box.insertBefore(wrap, out);
+    }
+
+    function stdinLines() {
+      if (!stdinInput) return [];
+      return stdinInput.value.split("⏎").map(function (s) { return s.trim(); });
+    }
+
+    if (solved[id]) markOk(false);
+
+    function markOk(fresh) {
+      box.classList.add("ok");
+      stat.className = "pr-st ok";
+      stat.textContent = fresh ? "✓ Correct — well done" : "✓ Solved earlier";
+    }
+
+    function exec() {
+      var code = ta.value;
+      out.classList.add("show");
+      out.textContent = "";
+      var setStatus = function (m) { stat.className = "pr-st"; stat.textContent = m; };
+      // no fixed "Program input" box: input() asks in the page, and each answer replays the run
+      var interactive = !stdinInput, answers = [], seed = Math.floor(Math.random() * 1e9);
+
+      function ask(text) {
+        out.innerHTML = "";
+        out.appendChild(document.createTextNode(text));
+        var inp = document.createElement("input");
+        inp.type = "text"; inp.className = "pr-ask"; inp.autocomplete = "off"; inp.spellcheck = false;
+        inp.setAttribute("aria-label", "Your answer to the program");
+        out.appendChild(inp);
+        var tip = document.createElement("div");
+        tip.className = "hint";
+        tip.textContent = "Type your answer and press Enter.";
+        out.appendChild(tip);
+        stat.className = "pr-st"; stat.textContent = "Waiting for your answer …";
+        inp.focus();
+        return new Promise(function (resolve) {
+          inp.addEventListener("keydown", function (e) {
+            if (e.key !== "Enter") return;
+            e.preventDefault();
+            answers.push(inp.value);
+            inp.disabled = true;
+            resolve(step());
+          });
+        });
+      }
+
+      function step() {
+        return runInWorker(code, interactive ? answers : stdinLines(), setStatus,
+                           interactive ? { interactive: true, seed: seed } : null)
+          .then(function (r) {
+            if (r.needInput) return ask(r.text);
+            return finish(r);
+          }, failed);
+      }
+      return step();
+
+      function finish(r) {
+          if (!r.ok) {
+            out.innerHTML = "";
+            if (r.text) out.appendChild(document.createTextNode(r.text + "\n"));
+            var es = document.createElement("span");
+            es.className = "err";
+            es.textContent = cleanTraceback(r.err);
+            out.appendChild(es);
+            var hint = document.createElement("div");
+            hint.className = "hint";
+            hint.textContent = "An error is Python talking to you, not judging you — read its last line first.";
+            out.appendChild(hint);
+            stat.className = "pr-st no"; stat.textContent = "Error — read the message below";
+            return { ok: false, text: r.text };
+          }
+          var figs = r.figs || [];
+          out.textContent = r.text.length ? r.text
+            : (figs.length ? "" : "(the program ran, but printed nothing)");
+          showFigures(out, figs);
+          if (!box.classList.contains("ok")) { stat.className = "pr-st"; stat.textContent = "Ran ✓"; }
+          // the step bar ticks a chapter step only when its practice has been run (Adi, 22 Oct 2026)
+          document.dispatchEvent(new CustomEvent("lwa:pyrun-ran", { detail: { id: id } }));
+          return { ok: true, text: r.text };
+      }
+
+      function failed(e) {
+          var msg = String(e && e.message || e);
+          out.classList.add("show");
+          if (msg === "__timeout__") {
+            out.innerHTML = "";
+            var es2 = document.createElement("span");
+            es2.className = "err";
+            es2.textContent = "Stopped: the program ran for more than " + (RUN_TIMEOUT_MS / 1000) + " seconds.";
+            out.appendChild(es2);
+            var h2 = document.createElement("div");
+            h2.className = "hint";
+            h2.textContent = "That usually means a loop that never ends — check the condition that is supposed to stop it. Just press Run again when you've fixed it (Python reloads automatically).";
+            out.appendChild(h2);
+            stat.className = "pr-st no"; stat.textContent = "Stopped — probably an endless loop";
+          } else if (msg === "__killed__") {
+            out.textContent = "";
+            stat.className = "pr-st"; stat.textContent = "";
+          } else {
+            out.textContent = msg;
+            stat.className = "pr-st no"; stat.textContent = "Could not run";
+          }
+          return { ok: false, text: "" };
+      }
+    }
+
+    bar.querySelector(".run").onclick = exec;
+    bar.querySelector(".rst").onclick = function () {
+      ta.value = original; autosize(ta);
+      out.classList.remove("show");
+      if (!box.classList.contains("ok")) { stat.className = "pr-st"; stat.textContent = ""; }
+    };
+    var chk = bar.querySelector(".chk");
+    if (chk) chk.onclick = function () {
+      exec().then(function (r) {
+        if (!r.ok) return;
+        if (normalize(r.text) === normalize(expect)) {
+          markOk(true);
+          solved[id] = true; saveSolved(solved);
+          document.dispatchEvent(new CustomEvent("lwa:pyrun-solved", { detail: { id: id } }));
+        } else {
+          stat.className = "pr-st no";
+          stat.textContent = "Not yet — compare your output with what was asked";
+        }
+      });
+    };
+
+    /* editor niceties: Ctrl+Enter runs, Tab indents 4 spaces */
+    ta.addEventListener("keydown", function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); exec(); }
+      else if (e.key === "Tab") {
+        e.preventDefault();
+        var s = ta.selectionStart, epos = ta.selectionEnd;
+        ta.value = ta.value.slice(0, s) + "    " + ta.value.slice(epos);
+        ta.selectionStart = ta.selectionEnd = s + 4;
+      }
+    });
+    ta.addEventListener("input", function () { autosize(ta); });
+  });
+
+  /* plots come back as PNGs; show them under the printed output */
+  function showFigures(out, figs) {
+    out.classList.toggle("has-fig", !!(figs && figs.length));
+    if (!figs || !figs.length) return;
+    figs.forEach(function (b64) {
+      var img = document.createElement("img");
+      img.className = "pr-fig";
+      img.alt = "Plot drawn by this program";
+      img.src = "data:image/png;base64," + b64;
+      out.appendChild(img);
+    });
+  }
+
+  function autosize(ta) {
+    var lines = ta.value.split("\n").length;
+    ta.style.height = "auto";
+    ta.rows = Math.max(2, Math.min(24, lines));
+  }
+})();

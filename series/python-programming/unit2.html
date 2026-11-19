@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="canonical" href="https://learnwithadi.com/series/python-programming/unit2.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remembering Things — Variables &amp; Numbers — Learn AI by Building</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/site.css?v=8">
+<link rel="stylesheet" href="../../assets/unit.css?v=8">
+<link rel="stylesheet" href="../../assets/nav.css?v=1">
+</head>
+<body data-lwa-course="python-programming" data-lwa-chapter="u02" data-lwa-title="Unit 2 · Remembering things — variables &amp; numbers">
+<header class="top nav2"><div class="top-in">
+  <a class="lwa-home" href="../../index.html"><img src="../../assets/wordmark-maroon.svg?v=1" alt="Learn AI by Building — home"></a>
+  <nav class="nav2-links" aria-label="Main"><a href="../../index.html">Home</a><a href="../../series/index.html" aria-current="page">Series</a><a href="../../blog/index.html">Blog</a><a href="../../connect.html">Connect</a></nav>
+  <span class="nav2-auth" data-lwa-auth></span>
+  <details class="nav2-menu"><summary>Menu</summary><div class="m"><a href="../../index.html">Home</a><a href="../../series/index.html">Series</a><a href="../../blog/index.html">Blog</a><a href="../../connect.html">Connect</a><a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp channel</a><span class="nav2-auth-m" data-lwa-auth></span></div></details>
+</div></header>
+<header class="masthead">
+  <div class="masthead-in">
+    
+    <div class="title-block">
+      <div class="eyebrow">Python Programming · Beginner — Foundations · Unit 2</div>
+      <h1>Remembering Things — Variables &amp; Numbers</h1>
+      <p class="standfirst">Unit 1 gave you one labelled box, and it carried a whole conversation. Today you get as many boxes as you want. You will do real arithmetic, you will finally see why <code style="font-size:.85em">"7"</code> and <code style="font-size:.85em">7</code> are not the same thing, and you will build a tip calculator that splits a restaurant bill between friends.</p>
+      <div class="facts">
+        <div><b>One session</b>~40 min</div>
+        <div><b>5 ideas</b>each: short read, then practice</div>
+        <div><b>21 problems</b>solved right here</div>
+        <div><b>Builds on</b>Unit 1 — print &amp; input</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="Sections">
+    <div class="rail-h">Contents</div>
+    <a href="#s1" class="on">2.1 Labelled boxes</a>
+    <a href="#s2">2.2 Numbers &amp; arithmetic</a>
+    <a href="#s3">2.3 Text vs numbers</a>
+    <a href="#s4">2.4 f-strings</a>
+    <a href="#s5">2.5 Build: tip calculator</a>
+    <a href="#s6">2.6 Problem bank</a>
+    <a href="#cheat">Quick reference</a>
+    <a href="#quiz">Check yourself</a>
+    <a href="#gloss">Glossary</a>
+  </nav>
+
+  <main>
+
+  <!-- ============ 2.1 ============ -->
+  <section id="s1">
+    <div class="prereq">
+      <div class="pq"><b>You need Unit 1</b>print(), input(), quotes, and reading an error's last line.</div>
+      <div class="pq"><b>How it works</b>Short read, then practice. <a href="https://colab.research.google.com/github/Aditya-402/learn-ai-by-building/blob/main/notebooks/python-programming/unit2.ipynb" rel="noopener">▶ Run in Colab</a>.</div>
+      <div class="pq"><b>The picture of memory</b>Unit 1 promised this would be the star.</div>
+    </div>
+    <div class="prose">
+      <span class="sec-num">2.1</span>
+      <h2>Labelled boxes</h2>
+      <span class="rtag"><span>Read · ~2 min</span><span class="pr">Practice · ~8 min</span></span>
+      <p>Let's try to understand where a program keeps what it knows.</p>
+      <p>In Unit 1 you typed your name and used it a line later. It waited somewhere in between, right? Where?</p>
+      <p>Think of your kitchen shelf. Sugar goes into a dabba with a paper label on it. Nobody opens all six later — they read the label.</p>
+      <p>Python does the same. <code>price = 40</code> takes a box, labels it <code>price</code>, puts <code>40</code> inside. After that, <code>price</code> means <i>what is in that box</i>.</p>
+      <ul class="plain">
+        <li><b>Read <code>=</code> as "store into", not "equals".</b> Right side first, then into the box on the left. So <code>count = count + 1</code> means: old contents plus one, back in.</li>
+        <li><b>A box holds one thing.</b> Something new goes in, the old is gone.</li>
+        <li><b>The label is exact.</b> <code>price</code> and <code>Price</code> are different boxes. No spaces, no leading digit.</li>
+      </ul>
+      <p>That labelled box is what we call a <b>variable</b>.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">price = 40                # a box labelled price, holding 40
+city = "Chennai"          # text keeps its quotes
+print(price)              # no quotes — read the box back</div>
+      <p>Label on the left, contents on the right.</p>
+    </div>
+
+    <div class="listing">
+      <div class="lh">One box, four lines</div>
+      <ol>
+        <li><code>score = 10</code><span class="note">Holds <b>10</b>.</span></li>
+        <li><code>score = score + 5</code><span class="note">Right side first: 10 + 5 is 15, back into the same box. The 10 is gone.</span></li>
+        <li><code>bonus = score</code><span class="note">A <i>new</i> box gets a copy. Two boxes now.</span></li>
+        <li><code>print(score, bonus)</code><span class="note">Both read back, one space at the comma.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>15 15</div>
+    </div>
+
+    <div class="fig">
+      <svg viewBox="0 0 860 200" role="img" aria-label="State of memory across four lines: score becomes 15, bonus copies it">
+        <text x="16" y="26" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#6a626e" letter-spacing="1.5">THE STATE OF MEMORY, LINE BY LINE</text>
+        <text x="60" y="58" font-family="Cascadia Mono,Consolas,monospace" font-size="12" fill="#3f2a41">after line 1</text>
+        <rect x="40" y="70" width="150" height="56" rx="9" fill="#f1e7ef" stroke="#5a3d5c" stroke-width="1.5"/>
+        <text x="115" y="92" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="12.5" font-weight="700" fill="#3f2a41">score</text>
+        <text x="115" y="114" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="13" fill="#2b2730">10</text>
+        <text x="330" y="58" font-family="Cascadia Mono,Consolas,monospace" font-size="12" fill="#3f2a41">after line 2</text>
+        <rect x="310" y="70" width="150" height="56" rx="9" fill="#f1e7ef" stroke="#5a3d5c" stroke-width="1.5"/>
+        <text x="385" y="92" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="12.5" font-weight="700" fill="#3f2a41">score</text>
+        <text x="385" y="114" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="13" fill="#2b2730">15</text>
+        <text x="385" y="152" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" fill="#a8441f">the 10 is gone — replaced, not kept</text>
+        <text x="620" y="58" font-family="Cascadia Mono,Consolas,monospace" font-size="12" fill="#3f2a41">after line 3</text>
+        <rect x="560" y="70" width="130" height="56" rx="9" fill="#f1e7ef" stroke="#5a3d5c" stroke-width="1.5"/>
+        <text x="625" y="92" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="12.5" font-weight="700" fill="#3f2a41">score</text>
+        <text x="625" y="114" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="13" fill="#2b2730">15</text>
+        <rect x="706" y="70" width="130" height="56" rx="9" fill="#e4ede6" stroke="#2f5a45" stroke-width="1.5"/>
+        <text x="771" y="92" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="12.5" font-weight="700" fill="#1d5654">bonus</text>
+        <text x="771" y="114" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="13" fill="#2b2730">15</text>
+        <text x="698" y="152" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" fill="#1d5654">a copy — two separate boxes</text>
+      </svg>
+      <div class="figcap">Fig. 1 — Memory after lines 1, 2 and 3. Keep it in your head as you read code.</div>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here</div>
+      <p><code>=</code> is not school's equals sign. It is an arrow pointing left: right side worked out, stored into the left. Read <code>count = count + 1</code> as "new count = old count + 1".</p>
+    </div>
+
+    <div class="worked">
+      <div class="wl">Now you run it</div>
+      <p>A game gives 10 points, doubles it, adds 3. Say the answer before pressing Run.</p>
+      <div class="pyrun" data-id="w1">
+        <textarea spellcheck="false">points = 10
+points = points * 2
+points = points + 3
+print(points)</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.1 · P1</span><span class="pt">Boxes in, boxes out</span></div>
+        <p class="pd">Two boxes: <code>city</code> holding <code>Chennai</code>, <code>year</code> holding <code>2026</code>. One print.</p>
+        <div class="want">Chennai 2026</div>
+        <div class="pyrun" data-id="s1p1" data-expect="Chennai 2026">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>city = "Chennai"
+year = 2026
+print(city, year)</pre><p>Text keeps its quotes; the number goes bare.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.1 · P2</span><span class="pt">Replace, don't keep</span></div>
+        <p class="pd">One box, three stores. Predict the output, then run.</p>
+        <div class="pyrun" data-id="s1p2">
+          <textarea spellcheck="false">word = "old"
+word = "new"
+word = "newest"
+print(word)</textarea>
+        </div>
+        <details><summary>Show what happens &amp; why</summary><pre>newest</pre><p>Only the last store survives.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.1 · P3</span><span class="pt">Fix the labels</span></div>
+        <p class="pd">Three broken labels. Let the error point the way.</p>
+        <div class="want">150</div>
+        <div class="pyrun" data-id="s1p3" data-expect="150">
+          <textarea spellcheck="false">total cost = 100
+2nd_charge = 50
+print(Total_cost + second_charge)</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>total_cost = 100
+second_charge = 50
+print(total_cost + second_charge)</pre><p>No spaces, no leading digit, exact capitals.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.1 · P4</span><span class="pt">Stretch — count up</span></div>
+        <p class="pd">Using only <code>count = count + 1</code> lines, take <code>count</code> from 0 to 3. Unit 4 removes this boredom.</p>
+        <div class="want">3</div>
+        <div class="pyrun" data-id="s1p4" data-expect="3">
+          <textarea spellcheck="false">count = 0
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>count = 0
+count = count + 1
+count = count + 1
+count = count + 1
+print(count)</pre><p>Remember this ache when loops arrive.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2.2 ============ -->
+  <section id="s2">
+    <div class="prose">
+      <span class="sec-num">2.2</span>
+      <h2>Numbers &amp; arithmetic</h2>
+      <span class="rtag"><span>Read · ~3 min</span><span class="pr">Practice · ~10 min</span></span>
+      <p>A box that only stores is a shelf. Let's make it earn something.</p>
+      <p>Think of a shop bill. Three samosas at fifteen, two teas at twelve, add it up, split it two ways. All of that is arithmetic.</p>
+      <p>Python has two kinds of number. A whole number — <code>4</code> — we call an <b>int</b>. One with a decimal point — <code>4.5</code> — we call a <b>float</b>.</p>
+      <p>Think of measuring cups. Whole cups are ints, the marks between them are floats.</p>
+      <p>Seven operators work on both:</p>
+      <div class="fig" style="max-width:66ch;padding:6px 18px">
+      <table>
+        <tr><th>operator</th><th>does</th><th>example</th><th>gives</th></tr>
+        <tr><td><code>+</code> <code>-</code> <code>*</code></td><td>add, subtract, multiply</td><td><code>4 * 5</code></td><td><code>20</code></td></tr>
+        <tr><td><code>/</code></td><td>divide — <b>always a float</b></td><td><code>10 / 4</code></td><td><code>2.5</code></td></tr>
+        <tr><td><code>//</code></td><td>divide, keep the whole part</td><td><code>10 // 4</code></td><td><code>2</code></td></tr>
+        <tr><td><code>%</code></td><td>what is left over</td><td><code>10 % 4</code></td><td><code>2</code></td></tr>
+        <tr><td><code>**</code></td><td>power</td><td><code>2 ** 3</code></td><td><code>8</code></td></tr>
+      </table>
+      </div>
+      <p><code>//</code> and <code>%</code> are a pair. Ten sweets, four children: <code>10 // 4</code> says each gets 2, <code>10 % 4</code> says 2 stay in your hand.</p>
+      <p>Order is the same as school, and brackets beat everything. <code>2 + 3 * 4</code> is 14, but <code>(2 + 3) * 4</code> is 20. When in doubt use brackets — they cost nothing.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">bill = 3 * 15 + 2 * 12    # right side worked out first, then stored
+each = bill / 2           # divide — always a decimal point</div>
+      <p>The right side finishes before anything reaches the box.</p>
+    </div>
+
+    <div class="listing">
+      <div class="lh">A real bill, line by line</div>
+      <ol>
+        <li><code>samosas = 3 * 15</code><span class="note">45 into the box.</span></li>
+        <li><code>tea = 2 * 12</code><span class="note">24 into a second box.</span></li>
+        <li><code>bill = samosas + tea</code><span class="note">45 + 24 is 69.</span></li>
+        <li><code>print(bill, bill / 2)</code><span class="note">The bill, then a two-way split. Look hard at it.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>69 34.5</div>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here</div>
+      <p>Why does <code>10 / 2</code> print <code>5.0</code> and not <code>5</code>? Because <code>/</code> always gives a float. Python will not switch the kind of answer just because a division came out clean. Want the whole number? Use <code>//</code>.</p>
+    </div>
+
+    <div class="worked">
+      <div class="wl">Now you run it</div>
+      <p>47 students, each van seats 12. How many full vans, and how many spill into the last one? "How many fit" is <code>//</code>, "who is left over" is <code>%</code>.</p>
+      <div class="pyrun" data-id="w2">
+        <textarea spellcheck="false">students = 47
+seats = 12
+print("Full vans:", students // seats)
+print("Left over:", students % seats)</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.2 · P1</span><span class="pt">The canteen bill</span></div>
+        <p class="pd">4 idlis at 10 each, 2 coffees at 15. Boxes for <code>idlis</code>, <code>coffees</code>, <code>bill</code>.</p>
+        <div class="want">Bill: 70</div>
+        <div class="pyrun" data-id="s2p1" data-expect="Bill: 70">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>idlis = 4 * 10
+coffees = 2 * 15
+bill = idlis + coffees
+print("Bill:", bill)</pre><p>Named boxes let you print any part of the working.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.2 · P2</span><span class="pt">Predict: the three divisions</span></div>
+        <p class="pd">Predict all three, including which carry a decimal point.</p>
+        <div class="pyrun" data-id="s2p2">
+          <textarea spellcheck="false">print(17 / 5)
+print(17 // 5)
+print(17 % 5)</textarea>
+        </div>
+        <details><summary>Show what happens &amp; why</summary><pre>3.4
+3
+2</pre><p><code>/</code> is exact, <code>//</code> keeps the whole part, <code>%</code> reports what is left.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.2 · P3</span><span class="pt">Brackets earn their keep</span></div>
+        <p class="pd">Three friends split a 100-rupee pizza and a 20-rupee delivery charge. This share is wrong — run it, then fix it.</p>
+        <div class="want">Each pays: 40.0</div>
+        <div class="pyrun" data-id="s2p3" data-expect="Each pays: 40.0">
+          <textarea spellcheck="false">share = 100 + 20 / 3
+print("Each pays:", share)</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>share = (100 + 20) / 3
+print("Each pays:", share)</pre><p>Without brackets the division runs first: 100 + 6.67. Brackets make the total exist before the split.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.2 · P4</span><span class="pt">Stretch — the chessboard legend</span></div>
+        <p class="pd">One grain on square 1, doubled each square after. Print square 64 alone — 2 to the power 63.</p>
+        <div class="want">9223372036854775808</div>
+        <div class="pyrun" data-id="s2p4" data-expect="9223372036854775808">
+          <textarea spellcheck="false">print(2 ** 63)</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>print(2 ** 63)</pre><p>Nine quintillion grains. Remember that when someone says "exponential" later.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2.3 ============ -->
+  <section id="s3">
+    <div class="prose">
+      <span class="sec-num">2.3</span>
+      <h2>Text vs numbers</h2>
+      <span class="rtag"><span>Read · ~3 min</span><span class="pr">Practice · ~8 min</span></span>
+      <p>Unit 1 left you with one line: quoted is repeated, unquoted is understood. Today it comes back with a bill.</p>
+      <p>Text is a <code>str</code>, a whole number an <code>int</code>, a decimal number a <code>float</code>. We call this kind its <b>type</b>.</p>
+      <p>And here is the point. The type decides what an operator <i>means</i>.</p>
+      <p>For numbers, <code>+</code> adds. For text, <code>+</code> glues. So <code>7 + 7</code> is 14, but <code>"7" + "7"</code> is <code>"77"</code>. Mix the two and Python refuses to guess.</p>
+      <p>Now the trap. It catches everybody, exactly once.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">7 + 7        # 14        — two numbers, added
+"7" + "7"    # 77        — two pieces of text, glued
+"7" + 7      # TypeError — Python will not guess which one you meant</div>
+      <p>To cross over, convert: <code>int("25")</code> gives the number, <code>str(25)</code> the text.</p>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here — this one catches everybody</div>
+      <p><code>input()</code> always hands back text. Always. Somebody types 25 and the box holds <code>"25"</code> — two characters, not a number. Add 3 and the program dies with a <code>TypeError</code>. The most common beginner bug in Python, and the fix is one word wide.</p>
+    </div>
+
+    <div class="listing">
+      <div class="lh">The fix — convert at the door</div>
+      <ol>
+        <li><code>age = int(input("Age? "))</code><span class="note">Ask, wait, convert straight away. The box holds the number 25, not the text <code>"25"</code>.</span></li>
+        <li><code>print("Next year:", age + 1)</code><span class="note">Honest arithmetic now. 25 + 1.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>Age? 25
+Next year: 26</div>
+    </div>
+
+    <div class="prose">
+      <p>Drop the <code>int()</code> and line 2 dies with <code>TypeError: can only concatenate str (not "int") to str</code> — glue-plus and maths-plus in the same breath.</p>
+      <p>Not sure what a box holds? <code>type(x)</code> tells you — ask that first whenever arithmetic misbehaves.</p>
+    </div>
+
+    <div class="keyidea">
+      <div class="lbl">Key idea</div>
+      The type decides what the operator means. <code>input()</code> always gives you text, so convert at the door with <code>int()</code> before any maths. Half the bugs of your first month live here.
+    </div>
+
+    <div class="worked">
+      <div class="wl">Now you run it</div>
+      <p>Ask for two numbers and print their real sum, not their gluing. Each <code>input()</code> goes straight into <code>int()</code>. Inputs: 8 and 5.</p>
+      <div class="pyrun" data-id="w3" data-stdin="8\n5">
+        <textarea spellcheck="false">a = int(input("First number? "))
+b = int(input("Second number? "))
+print("Sum:", a + b)</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.3 · P1</span><span class="pt">Predict: glue vs add</span></div>
+        <p class="pd">Predict all four. Which glue, which add, which refuse? The error stops the program — what prints before it?</p>
+        <div class="pyrun" data-id="s3p1">
+          <textarea spellcheck="false">print(7 + 7)
+print("7" + "7")
+print("7" * 3)
+print("7" + 7)</textarea>
+        </div>
+        <details><summary>Show what happens &amp; why</summary><pre>14
+77
+777
+TypeError: can only concatenate str (not "int") to str</pre><p>Numbers add, text glues, the mix is refused. Notice lines 1 to 3 printed before the crash — a program dies where it stands.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.3 · P2</span><span class="pt">Fix the birthday bot</span></div>
+        <p class="pd">This dies on line 2. Run it, read the last line, fix with one conversion.</p>
+        <div class="want">How old are you? 17
+In 3 years you'll be 20</div>
+        <div class="pyrun" data-id="s3p2" data-stdin="17" data-stdin-lock data-expect="How old are you? 17\nIn 3 years you'll be 20">
+          <textarea spellcheck="false">age = input("How old are you? ")
+soon = age + 3
+print("In 3 years you'll be", soon)</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>age = int(input("How old are you? "))
+soon = age + 3
+print("In 3 years you'll be", soon)</pre><p>Convert at the door and never wonder which boxes hold text.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.3 · P3</span><span class="pt">Stretch — the glue trap in reverse</span></div>
+        <p class="pd">Unit 1's old enemy: no space before the <code>!</code>. Turn the number into text with <code>str()</code>, glue with <code>+</code>.</p>
+        <div class="want">Score: 95!</div>
+        <div class="pyrun" data-id="s3p3" data-expect="Score: 95!">
+          <textarea spellcheck="false">points = 95
+print("Score:", points, "!")</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>points = 95
+print("Score: " + str(points) + "!")</pre><p>Gluing needs text, so the number visits <code>str()</code> first. Clumsy — the next section fixes it.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2.4 ============ -->
+  <section id="s4">
+    <div class="prose">
+      <span class="sec-num">2.4</span>
+      <h2>f-strings — just write the sentence</h2>
+      <span class="rtag"><span>Read · ~2 min</span><span class="pr">Practice · ~8 min</span></span>
+      <p>So far, building a sentence out of boxes has meant choosing between two annoying tools. Commas put spaces where you did not ask for them. Gluing makes you wrap every number in <code>str()</code>.</p>
+      <p>Surely there is a way to just write the sentence, right?</p>
+      <p>There is, and it is Python at its most pleasant. Put an <code>f</code> in front of the opening quote. The string becomes a template. Anything inside curly braces gets filled in from your boxes, exactly where you wrote it.</p>
+      <p>No commas. No gluing. No <code>str()</code> — numbers convert themselves. Spaces and punctuation land precisely where you typed them.</p>
+      <p>The <code>f</code> stands for <i>formatted</i>, and formatting is the second gift. Put <code>:.2f</code> after a box name and the number is written with exactly two decimal places. That is money. The build below runs on it.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">f"Hello, {name} from {city}!"    # the box contents drop in, right there
+f"Price: {price:.2f} rupees"     # same, written with exactly two decimals</div>
+      <p>The <code>f</code> sits outside the quote. The box label sits inside the braces.</p>
+    </div>
+
+    <div class="listing">
+      <div class="lh">One template, filled in</div>
+      <ol>
+        <li><code>name = "Ada"</code><span class="note">Text in a box.</span></li>
+        <li><code>each = 106.666666</code><span class="note">A long, ugly number in another box.</span></li>
+        <li><code>print(f"{name} pays {each:.2f} rupees")</code><span class="note">Python walks the template left to right. <code>{name}</code> becomes Ada. The plain words stay put. <code>{each:.2f}</code> becomes 106.67 — it rounds, it does not chop.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>Ada pays 106.67 rupees</div>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here</div>
+      <p>Forgot the <code>f</code>? Then <code>print("Hello, {name}")</code> prints the braces just as they are: <code>Hello, {name}</code>. No error, just a template nobody filled in. If you ever see curly braces on your screen, the missing <code>f</code> is the reason. Every single time.</p>
+    </div>
+
+    <div class="worked">
+      <div class="wl">Now you run it</div>
+      <p>Print 2.3's <code>Score: 95!</code> the modern way, and a price line with clean decimals. Write the sentence the way you want to read it. Then drop the boxes into braces where the values belong.</p>
+      <div class="pyrun" data-id="w4">
+        <textarea spellcheck="false">points = 95
+price = 1234.5
+print(f"Score: {points}!")
+print(f"Price: {price:.2f} rupees")</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.4 · P1</span><span class="pt">Rewrite with f-strings</span></div>
+        <p class="pd">Rewrite this comma-and-glue mess as <b>one</b> f-string print.</p>
+        <div class="want">Ada scored 95 in Python!</div>
+        <div class="pyrun" data-id="s4p1" data-expect="Ada scored 95 in Python!">
+          <textarea spellcheck="false">name = "Ada"
+marks = 95
+subject = "Python"
+print(name, "scored", marks, "in", subject, "!")</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>name = "Ada"
+marks = 95
+subject = "Python"
+print(f"{name} scored {marks} in {subject}!")</pre><p>Now the sentence reads like a sentence, and the punctuation obeys you instead of the comma rule.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.4 · P2</span><span class="pt">Two decimals, always</span></div>
+        <p class="pd">A shop wants every price shown with two decimals. Print both using <code>:.2f</code>. One gets padded, one gets rounded.</p>
+        <div class="want">Tea: 12.00
+Cake: 45.68</div>
+        <div class="pyrun" data-id="s4p2" data-expect="Tea: 12.00\nCake: 45.68">
+          <textarea spellcheck="false">tea = 12
+cake = 45.678
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>tea = 12
+cake = 45.678
+print(f"Tea: {tea:.2f}")
+print(f"Cake: {cake:.2f}")</pre><p><code>:.2f</code> means: as a decimal number, two places. So 12 becomes 12.00 and 45.678 rounds to 45.68.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.4 · P3</span><span class="pt">Stretch — why money needs :.2f</span></div>
+        <p class="pd">Run it and look hard at the first line. Then fix the print with <code>:.2f</code>. The weirdness is not your fault.</p>
+        <div class="want">Total: 0.30</div>
+        <div class="pyrun" data-id="s4p3" data-expect="Total: 0.30">
+          <textarea spellcheck="false">total = 0.1 + 0.2
+print("Total:", total)</textarea>
+        </div>
+        <details><summary>Show solution &amp; the why</summary><pre>total = 0.1 + 0.2
+print(f"Total: {total:.2f}")</pre><p>0.1 in binary repeats forever, the way one-third repeats in decimal, so a microscopic error rides along. Every language has this — which is why money gets fixed decimals.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2.5 BUILD ============ -->
+  <section id="s5">
+    <div class="prose">
+      <span class="sec-num">2.5</span>
+      <h2>Your build — the tip calculator</h2>
+      <span class="rtag"><span>Read · ~1 min</span><span class="pr">Practice · ~12 min</span></span>
+      <p>Time to put the whole session into one program.</p>
+      <p>You are at a restaurant with three friends. The bill arrives. Somebody wants to add a tip, and everybody has to pay their share. That is your program. Ask for the bill, the tip percent, and how many people. Work out the tip, the total, and each person's share. Print money like money.</p>
+      <p>That is <code>input()</code> with <code>int()</code>, three lines of arithmetic, and f-strings with <code>:.2f</code>. Nothing new. Build it in two stages, the way real programs get built.</p>
+    </div>
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.5 · P1</span><span class="pt">Stage 1 — bill and tip</span></div>
+        <p class="pd">Ask <code>Bill amount? </code> and <code>Tip percent? </code>, converting at the door. Tip is <code>bill * tip_percent / 100</code>.</p>
+        <div class="want">Bill amount? 1200
+Tip percent? 10
+Tip: 120.00
+Total: 1320.00</div>
+        <div class="pyrun" data-id="s5p1" data-stdin="1200\n10" data-stdin-lock data-expect="Bill amount? 1200\nTip percent? 10\nTip: 120.00\nTotal: 1320.00">
+          <textarea spellcheck="false">bill = int(input("Bill amount? "))
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>bill = int(input("Bill amount? "))
+tip_percent = int(input("Tip percent? "))
+tip = bill * tip_percent / 100
+total = bill + tip
+print(f"Tip: {tip:.2f}")
+print(f"Total: {total:.2f}")</pre><p>Dividing by 100 makes <code>tip</code> a float, 120.0. Then <code>:.2f</code> dresses it up as money.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.5 · P2</span><span class="pt">Stage 2 — split it</span></div>
+        <p class="pd">Now grow it. Also ask <code>How many people? </code> and print each share. Paste your Stage 1 code and add to it.</p>
+        <div class="want">Bill amount? 1200
+Tip percent? 10
+How many people? 4
+Tip: 120.00
+Total: 1320.00
+Each pays: 330.00</div>
+        <div class="pyrun" data-id="s5p2" data-stdin="1200\n10\n4" data-stdin-lock data-expect="Bill amount? 1200\nTip percent? 10\nHow many people? 4\nTip: 120.00\nTotal: 1320.00\nEach pays: 330.00">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>bill = int(input("Bill amount? "))
+tip_percent = int(input("Tip percent? "))
+people = int(input("How many people? "))
+tip = bill * tip_percent / 100
+total = bill + tip
+each = total / people
+print(f"Tip: {tip:.2f}")
+print(f"Total: {total:.2f}")
+print(f"Each pays: {each:.2f}")</pre><p>Ask, convert, compute, format. That four-beat shape is most of practical programming.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">2.5 · P3</span><span class="pt">Stretch — make it yours</span></div>
+        <p class="pd">The input field is unlocked. Try your own bill, a head-count like 3, a 12% tip. No check here.</p>
+        <div class="pyrun" data-id="s5p3" data-stdin="850\n12\n3">
+          <textarea spellcheck="false">bill = int(input("Bill amount? "))
+tip_percent = int(input("Tip percent? "))
+people = int(input("How many people? "))
+total = bill + bill * tip_percent / 100
+print(f"Each pays: {total / people:.2f}")</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2.6 PROBLEM BANK ============ -->
+  <section id="s6">
+    <div class="prose">
+      <span class="sec-num">2.6</span>
+      <h2>Problem bank</h2>
+      <span class="rtag"><span class="pr">Practice · ~12 min</span></span>
+      <p>Nothing new here. Boxes, all seven operators, converting, f-strings — mixed together. Do them in order. They get meaner.</p>
+    </div>
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">B1</span><span class="pt">The swap</span></div>
+        <p class="pd">Make the two boxes trade contents. Use a third box as a temporary shelf. Changing the first two lines is cheating.</p>
+        <div class="want">tea coffee</div>
+        <div class="pyrun" data-id="b1" data-expect="tea coffee">
+          <textarea spellcheck="false">a = "coffee"
+b = "tea"
+# swap them here
+
+print(a, b)</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>a = "coffee"
+b = "tea"
+temp = a
+a = b
+b = temp
+print(a, b)</pre><p>Shelf the contents before overwriting, or "coffee" is gone for good.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">B2</span><span class="pt">Digits of a number</span></div>
+        <p class="pd">Print the tens digit and the ones digit using only <code>//</code> and <code>%</code>.</p>
+        <div class="want">Tens: 7
+Ones: 4</div>
+        <div class="pyrun" data-id="b2" data-expect="Tens: 7\nOnes: 4">
+          <textarea spellcheck="false">n = 74
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>n = 74
+print("Tens:", n // 10)
+print("Ones:", n % 10)</pre><p>Dividing by 10 pushes a digit off; the remainder is the digit that fell off.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">B3</span><span class="pt">Minutes, humanised</span></div>
+        <p class="pd">Ask <code>Minutes? </code>, convert, and report hours and minutes using <code>//</code> and <code>%</code> inside one f-string. Input is fixed to 175.</p>
+        <div class="want">Minutes? 175
+That is 2 h 55 min</div>
+        <div class="pyrun" data-id="b3" data-stdin="175" data-stdin-lock data-expect="Minutes? 175\nThat is 2 h 55 min">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>minutes = int(input("Minutes? "))
+print(f"That is {minutes // 60} h {minutes % 60} min")</pre><p>Whole hours from <code>//</code>, leftover minutes from <code>%</code>. And yes — a whole calculation can live inside the braces.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">B4</span><span class="pt">Stretch — the fuel-cost estimator</span></div>
+        <p class="pd">A 380 km trip, 18.5 km per litre, petrol at 102.40. Litres is distance ÷ mileage; cost is litres × price.</p>
+        <div class="want">Litres: 20.54
+Cost: 2103.35</div>
+        <div class="pyrun" data-id="b4" data-expect="Litres: 20.54\nCost: 2103.35">
+          <textarea spellcheck="false">distance = 380
+mileage = 18.5
+price = 102.40
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>distance = 380
+mileage = 18.5
+price = 102.40
+litres = distance / mileage
+cost = litres * price
+print(f"Litres: {litres:.2f}")
+print(f"Cost: {cost:.2f}")</pre><p>The display rounds, the box keeps 20.5405… Format at the exit, never in the middle.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUICK REFERENCE ============ -->
+  <section id="cheat">
+    <div class="prose">
+      <h2>Quick reference</h2>
+      <p>Everything from today on one screen. Come back to this page for this box alone.</p>
+    </div>
+    <div class="cheat">
+      <h4>Boxes</h4>
+      <table>
+        <tr><td><code>price = 40</code></td><td>make a box labelled price, put 40 inside</td></tr>
+        <tr><td><code>city = "Chennai"</code></td><td>text goes in with its quotes</td></tr>
+        <tr><td><code>print(price)</code></td><td>read the box back — no quotes around the label</td></tr>
+        <tr><td><code>count = count + 1</code></td><td>old contents plus one, stored back in the same box</td></tr>
+      </table>
+      <h4>Arithmetic</h4>
+      <table>
+        <tr><td><code>+</code> <code>-</code> <code>*</code></td><td>add, subtract, multiply</td></tr>
+        <tr><td><code>10 / 4</code> → <code>2.5</code></td><td>divide — always a float</td></tr>
+        <tr><td><code>10 // 4</code> → <code>2</code></td><td>divide, keep only the whole part</td></tr>
+        <tr><td><code>10 % 4</code> → <code>2</code></td><td>what is left over</td></tr>
+        <tr><td><code>2 ** 3</code> → <code>8</code></td><td>power</td></tr>
+        <tr><td><code>(2 + 3) * 4</code></td><td>brackets first — when in doubt, use them</td></tr>
+      </table>
+      <h4>Types and converting</h4>
+      <table>
+        <tr><td><code>str</code> · <code>int</code> · <code>float</code></td><td>text · whole number · decimal number</td></tr>
+        <tr><td><code>"7" + "7"</code> → <code>77</code></td><td>for text, <code>+</code> glues instead of adding</td></tr>
+        <tr><td><code>int(input("Age? "))</code></td><td>convert at the door — input always gives text</td></tr>
+        <tr><td><code>str(95)</code></td><td>number to text, when you want to glue</td></tr>
+        <tr><td><code>type(x)</code></td><td>what is really in this box? ask this first when maths misbehaves</td></tr>
+        <tr><td><code>TypeError</code></td><td>you mixed text and numbers — Python refuses to guess</td></tr>
+      </table>
+      <h4>Writing sentences</h4>
+      <table>
+        <tr><td><code>f"Hi {name}"</code></td><td>the box contents drop into the braces</td></tr>
+        <tr><td><code>f"{price:.2f}"</code></td><td>exactly two decimal places — the money format</td></tr>
+        <tr><td>braces on screen</td><td>you forgot the <code>f</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz">
+    <div class="prose">
+      <h2>Check yourself</h2>
+      <p>Six questions. A wrong answer here is worth more than a right one — read the explanation either way.</p>
+    </div>
+    <div class="stack" id="quiz-box"></div>
+    <div class="score" id="quiz-score" hidden></div>
+  </section>
+
+  <!-- ============ GLOSSARY ============ -->
+  <section id="gloss">
+    <div class="prose">
+      <h2>Glossary</h2>
+      <p>Every word from today that you will need again.</p>
+    </div>
+    <dl class="gloss" id="gloss-list"></dl>
+  </section>
+
+  <!-- ============ NEXT ============ -->
+  <section>
+    <div class="next">
+      <div class="lbl">Before you go to Unit 3</div>
+      <h3>Go and break the tip calculator</h3>
+      <p style="font-size:var(--fs-cap);color:var(--slate)">Take the calculator you just built and push it around. Add a service charge on top. Ask for the number of people first instead of last. Give it a bill of 1 rupee and 7 people, and see what <code>:.2f</code> does. Then take the <code>int()</code> off one input on purpose and read the error properly. That last one is not a joke — you learn more from ten broken programs than from ten copied ones.</p>
+      <p style="font-size:var(--fs-cap);color:var(--slate);margin-top:10px">Then in <b>Unit 3</b> your programs learn to <i>choose</i>. Right now every run walks the same straight line. Unit 3 gives it a fork in the road: True and False, the comparisons that produce them, and <code>if</code> / <code>elif</code> / <code>else</code> to act on the answer. Our little note about <code>=</code> versus <code>==</code> becomes the star of that unit.</p>
+      <p style="font-size:var(--fs-cap);color:var(--slate);margin-top:10px"><i>One question for you before that: your calculator divides the total by the number of people. What should it do if somebody types 0?</i></p>
+    </div>
+  </section>
+
+  <!-- ============ REFERENCES ============ -->
+  <section class="lwa-refs" id="refs">
+    <div class="prose">
+      <h2>References</h2>
+      <p>Where to read more on today's ground, in the order I would read them.</p>
+    </div>
+    <ol>
+      <li><b>The Python Tutorial</b> — <i>§3.1 Numbers &amp; §3.1.2 Text</i>. <span class="why">The official treatment of ints, floats, operators and strings — the same ground as 2.2 and 2.3.</span> <a href="https://docs.python.org/3/tutorial/introduction.html" rel="noopener">docs.python.org</a></li>
+      <li><b>Sweigart, A.</b> — <i>Automate the Boring Stuff with Python, ch. 1 (Python Basics)</i>. <span class="why">Free online; expressions, data types, variables and string gluing, hands-on.</span> <a href="https://automatetheboringstuff.com/2e/chapter1/" rel="noopener">book</a></li>
+      <li><b>Python documentation</b> — <i>Format Specification Mini-Language</i>. <span class="why">Everything <code>:.2f</code> can do, and its many cousins. Skim it now, bookmark it forever.</span> <a href="https://docs.python.org/3/library/string.html#format-specification-mini-language" rel="noopener">docs.python.org</a></li>
+      <li><b>Python documentation</b> — <i>Floating Point Arithmetic: Issues and Limitations</i>. <span class="why">The honest full story behind 2.4's 0.30000000000000004.</span> <a href="https://docs.python.org/3/tutorial/floatingpoint.html" rel="noopener">docs.python.org</a></li>
+    </ol>
+  </section>
+
+  <section class="keep" aria-label="Follow along"><p class="follow">New chapters and episodes come out every week. Follow along on <a href="https://www.youtube.com/@learn-ai-by-building" rel="noopener">YouTube</a> or the <a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp channel</a>.</p></section>
+  <div class="lwa-chapnav">
+    <a href="unit1.html"><span class="k">← Previous</span><span class="t">Unit 1 · Your first conversation with a computer</span></a>
+    <button type="button" class="lwa-complete" data-lwa-complete><span class="k">Progress</span><span class="t">Mark this unit complete</span></button>
+    <a href="unit3.html"><span class="k">Next →</span><span class="t">Unit 3 · Making decisions</span></a>
+  </div>
+
+  </main>
+</div>
+
+<footer class="nav2-foot"><div class="fi">
+  <a href="../../index.html"><img src="../../assets/wordmark.svg?v=2" alt="Learn AI by Building — home"></a>
+  <nav aria-label="Footer"><a href="../../index.html">Home</a><a href="../../series/index.html">Series</a><a href="../../blog/index.html">Blog</a><a href="../../connect.html">Connect</a><a href="https://www.youtube.com/@learn-ai-by-building" rel="noopener">YouTube</a><a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp</a><a href="../../privacy.html">Privacy</a></nav>
+  <span class="by">Learn AI by Building · by Adi (Aditya)</span>
+</div></footer>
+
+<script>
+"use strict";
+/* ============ Quiz ============ */
+const QUIZ = [
+  {q:"What does the line  count = count + 1  actually do?",
+   o:["Nothing — it's a mathematical impossibility","States that count equals count plus one","Computes the right side using the box's current contents, then stores the result back into the box","Creates a second box also called count"],
+   a:2,
+   e:"= means 'store into', not 'equals'. Right side first — old contents plus one. Then it goes back into the same box, and the old value is gone."},
+  {q:"What does 10 / 2 give?",
+   o:["5","5.0","2.5","An error"],
+   a:1,
+   e:"The / operator always gives a float, even when the division comes out clean. Want the whole number? That is 10 // 2, which gives 5."},
+  {q:"You need to know how many are LEFT OVER after sharing 23 sweets among 4 kids. Which operator?",
+   o:["/","//","%","**"],
+   a:2,
+   e:"% gives the remainder: 23 % 4 is 3 sweets still in your hand. Its partner // gives each kid's share: 23 // 4 is 5."},
+  {q:"Someone types 25 at  age = input(\"Age? \")  — what is in the box?",
+   o:["The int 25","The float 25.0","The string \"25\"","Depends on what was typed"],
+   a:2,
+   e:"input() always hands back text, whatever was typed. Convert before any maths: int(age). This is the single most common beginner bug in Python."},
+  {q:"What does \"7\" + \"7\" give?",
+   o:["14","\"77\"","An error","49"],
+   a:1,
+   e:"For text, + glues. The type decides what the operator means: 7 + 7 adds to 14, \"7\" + \"7\" glues to \"77\", and \"7\" + 7 is refused with a TypeError."},
+  {q:"What does  print(f\"{price:.2f}\")  do that  print(price)  doesn't?",
+   o:["Prints the price twice","Writes the number with exactly two decimal places, rounding if needed","Converts the price to an integer","Makes the output bold"],
+   a:1,
+   e:":.2f is a formatting instruction — as a decimal number, two places. 12 becomes 12.00 and 45.678 becomes 45.68. Only the display changes; the box keeps its full value."}
+];
+const quizBox = document.getElementById("quiz-box");
+const scoreEl = document.getElementById("quiz-score");
+let answered = 0, correct = 0;
+QUIZ.forEach((item,qi)=>{
+  const card = document.createElement("div");
+  card.className = "q-card";
+  card.innerHTML = "<div class='qq'>"+(qi+1)+". "+item.q+"</div>";
+  const opts = document.createElement("div");
+  opts.className = "opts";
+  item.o.forEach((text,oi)=>{
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "opt"; b.textContent = text;
+    b.addEventListener("click",()=>{
+      if(card.dataset.done) return;
+      card.dataset.done = "1";
+      answered++;
+      if(oi === item.a) correct++;
+      [...opts.children].forEach((el,j)=>{
+        el.disabled = true;
+        if(j === item.a) el.classList.add("right");
+        else if(j === oi) el.classList.add("wrong");
+      });
+      const ex = document.createElement("div");
+      ex.className = "explain";
+      ex.innerHTML = (oi === item.a ? "<b>Correct.</b> " : "<b>Not quite.</b> ") + item.e;
+      card.appendChild(ex);
+      if(answered === QUIZ.length){
+        scoreEl.hidden = false;
+        scoreEl.textContent = "You scored "+correct+" out of "+QUIZ.length+
+          (correct === QUIZ.length ? " — every one. Your programs now remember and compute."
+           : correct >= 4 ? " — solid. Read the ones you missed once more; 2.1 and 2.3 carry the load."
+           : " — worth another pass through the practice above before Unit 3.");
+      }
+    });
+    opts.appendChild(b);
+  });
+  card.appendChild(opts);
+  quizBox.appendChild(card);
+});
+
+/* ============ Glossary ============ */
+const GLOSSARY = [
+  ["Variable","A labelled box holding one value. Made by storing into it, read by writing its label, replaced by storing again."],
+  ["Assignment (=)","'Store into', right to left: work out the right side, put the result in the box on the left. Not the equals sign from school."],
+  ["int","A whole number: 4, -12, 2026. No decimal point."],
+  ["float","A number with a decimal point: 4.5, 0.1, 330.0. Dividing with / always gives one."],
+  ["Type","What kind of value something is — str, int or float. The type decides what an operator means. type(x) tells you."],
+  ["// (floor division)","Divide and keep only the whole part: 17 // 5 gives 3."],
+  ["% (modulo)","What is left over after dividing: 17 % 5 gives 2. The partner of //."],
+  ["** (power)","Raise to a power: 2 ** 10 gives 1024."],
+  ["TypeError","Python refusing to mix text and numbers: \"7\" + 7 could mean two things, so it means neither."],
+  ["int() / float() / str()","Converters between types. input() always returns text, so convert at the door before any maths."],
+  ["f-string","A quoted template with an f in front: f\"Hi {name}\". Box contents drop into the braces, and numbers convert themselves."],
+  [":.2f","A format instruction inside the braces: write this number with exactly two decimal places. The money formatter."]
+];
+document.getElementById("gloss-list").innerHTML = GLOSSARY.map(([t,d])=>
+  "<div class='gcard'><dt>"+t+"</dt><dd>"+d+"</dd></div>").join("");
+
+/* ============ Scrollspy ============ */
+const links = [...document.querySelectorAll(".rail a")];
+const targets = links.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean);
+function syncRail(){
+  const line = window.innerHeight * 0.28;
+  let active = targets[0];
+  for(const t of targets){
+    if(t.getBoundingClientRect().top <= line) active = t;
+  }
+  if(window.innerHeight + window.scrollY >= document.body.scrollHeight - 4){
+    active = targets[targets.length-1];
+  }
+  links.forEach(a=>a.classList.toggle("on", a.getAttribute("href") === "#"+active.id));
+}
+let ticking = false;
+addEventListener("scroll",()=>{
+  if(ticking) return;
+  ticking = true;
+  requestAnimationFrame(()=>{ syncRail(); ticking = false; });
+},{passive:true});
+addEventListener("resize", syncRail);
+syncRail();
+
+</script>
+<script src="../../assets/site-config.js"></script>
+<script src="../../assets/analytics.js?v=1" defer></script>
+<script src="../../assets/progress.js?v=3"></script>
+<script src="../../assets/unitnav.js?v=1"></script>
+<script src="../../assets/pyrun.js?v=3"></script>
+<script src="../../assets/stepper.js?v=3"></script>
+<script src="../../assets/spark.js?v=4" defer></script>
+</body>
+</html>

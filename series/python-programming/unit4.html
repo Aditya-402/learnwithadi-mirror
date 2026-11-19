@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="canonical" href="https://learnwithadi.com/series/python-programming/unit4.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doing It Again — Loops — Learn AI by Building</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/site.css?v=8">
+<link rel="stylesheet" href="../../assets/unit.css?v=8">
+<link rel="stylesheet" href="../../assets/nav.css?v=1">
+</head>
+<body data-lwa-course="python-programming" data-lwa-chapter="u04" data-lwa-title="Unit 4 · Doing it again — loops">
+<header class="top nav2"><div class="top-in">
+  <a class="lwa-home" href="../../index.html"><img src="../../assets/wordmark-maroon.svg?v=1" alt="Learn AI by Building — home"></a>
+  <nav class="nav2-links" aria-label="Main"><a href="../../index.html">Home</a><a href="../../series/index.html" aria-current="page">Series</a><a href="../../blog/index.html">Blog</a><a href="../../connect.html">Connect</a></nav>
+  <span class="nav2-auth" data-lwa-auth></span>
+  <details class="nav2-menu"><summary>Menu</summary><div class="m"><a href="../../index.html">Home</a><a href="../../series/index.html">Series</a><a href="../../blog/index.html">Blog</a><a href="../../connect.html">Connect</a><a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp channel</a><span class="nav2-auth-m" data-lwa-auth></span></div></details>
+</div></header>
+<header class="masthead">
+  <div class="masthead-in">
+    
+    <div class="title-block">
+      <div class="eyebrow">Python Programming · Beginner — Foundations · Unit 4</div>
+      <h1>Doing It Again — Loops</h1>
+      <p class="standfirst">In Unit 2 I made you type <code style="font-size:.85em">count = count + 1</code> three times by hand, and asked you to remember the ache. Today it is paid off. Your programs learn to repeat themselves, so you never have to.</p>
+      <div class="facts">
+        <div><b>One session</b>~50 min</div>
+        <div><b>5 ideas</b>each: short read, then practice</div>
+        <div><b>19 problems</b>solved right here</div>
+        <div><b>Builds on</b>Units 2 &amp; 3 — boxes, arithmetic, if/else</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="Sections">
+    <div class="rail-h">Contents</div>
+    <a href="#s1" class="on">4.1 while</a>
+    <a href="#s2">4.2 for + range</a>
+    <a href="#s3">4.3 break &amp; continue</a>
+    <a href="#s4">4.4 Counters &amp; accumulators</a>
+    <a href="#s5">4.5 Build: guess again</a>
+    <a href="#s6">4.6 Problem bank</a>
+    <a href="#cheat">Quick reference</a>
+    <a href="#quiz">Check yourself</a>
+    <a href="#gloss">Glossary</a>
+  </nav>
+
+  <main>
+
+  <!-- ============ 4.1 ============ -->
+  <section id="s1">
+    <div class="prereq">
+      <div class="pq"><b>You will need Units 2 &amp; 3</b>Boxes, arithmetic, if/elif/else.</div>
+      <div class="pq"><b>How it works</b>Short read, then practice. <a href="https://colab.research.google.com/github/Aditya-402/learn-ai-by-building/blob/main/notebooks/python-programming/unit4.ipynb" rel="noopener">▶ Colab</a>.</div>
+      <div class="pq"><b>The ache, paid</b>Unit 2 promised a cure. This is it.</div>
+    </div>
+    <div class="prose">
+      <span class="sec-num">4.1</span>
+      <h2>while — repeat while it is true</h2>
+      <span class="rtag"><span>Read · ~2 min</span><span class="pr">Practice · ~10 min</span></span>
+      <p>Let's try to understand what a loop really is.</p>
+      <p>You have cycled somewhere far, right? You never decide beforehand how many times to pedal. You pedal, you look up, and you ask: have I reached? Not yet — so you pedal again. You stop only when the answer changes.</p>
+      <p>That is a loop. Python says it almost in English: <i>while</i> this is true, do that.</p>
+      <p>Three parts: a start, a condition, an update.</p>
+      <p>That update is your payoff. In Unit 2 you wrote <code>count = count + 1</code> by hand and it felt like nonsense maths. It was never nonsense — it was waiting for today.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">while some_condition:
+    do this
+    and change what it reads</div>
+      <p>Colon and indent, like <code>if</code>. But it comes back and asks again.</p>
+    </div>
+
+    <div class="listing">
+      <div class="lh">Count to three</div>
+      <ol>
+        <li><code>count = 1</code><span class="note">The start — before the loop.</span></li>
+        <li><code>while count &lt;= 3:</code><span class="note">Asked fresh, every pass.</span></li>
+        <li><code>    print(count)</code><span class="note">Indented — part of the loop.</span></li>
+        <li><code>    count = count + 1</code><span class="note">The update — pushes it towards no.</span></li>
+        <li><code>print("Done")</code><span class="note">Not indented. Runs once, after.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>1
+2
+3
+Done</div>
+    </div>
+
+    <div class="trace">
+      <div class="dl">The loop table — draw it whenever a loop confuses you</div>
+      <table>
+        <tr><th>visit to the top</th><th>count holds</th><th>count &lt;= 3 ?</th><th>so…</th></tr>
+        <tr><td>1</td><td><code>1</code></td><td>True</td><td>prints 1 · count → 2</td></tr>
+        <tr><td>2</td><td><code>2</code></td><td>True</td><td>prints 2 · count → 3</td></tr>
+        <tr><td>3</td><td><code>3</code></td><td>True</td><td>prints 3 · count → 4</td></tr>
+        <tr><td>4</td><td><code>4</code></td><td><b>False</b></td><td>loop ends</td></tr>
+      </table>
+    </div>
+
+    <div class="fig">
+      <svg viewBox="0 0 860 300" role="img" aria-label="The loop cycle: check the condition; if True run the body then the update line and go back to the check; if False leave the loop">
+        <text x="16" y="26" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#6a626e" letter-spacing="1.5">THE LOOP CYCLE — EVERY while, EVERY TIME</text>
+        <polyline points="722,88 722,56 160,56 160,84" fill="none" stroke="#5a3d5c" stroke-width="1.5"/>
+        <polygon points="154,82 166,82 160,92" fill="#5a3d5c"/>
+        <text x="441" y="49" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" fill="#3f2a41">back to the top — ask again</text>
+        <rect x="60" y="92" width="200" height="64" rx="10" fill="#f1e7ef" stroke="#5a3d5c" stroke-width="1.5"/>
+        <text x="160" y="120" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="13" font-weight="700" fill="#3f2a41">count &lt;= 3 ?</text>
+        <text x="160" y="142" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" fill="#6a626e">the condition</text>
+        <line x1="260" y1="124" x2="342" y2="124" stroke="#2f5a45" stroke-width="1.5"/>
+        <polygon points="342,118 342,130 352,124" fill="#2f5a45"/>
+        <text x="301" y="114" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#1d5654">True</text>
+        <rect x="354" y="92" width="176" height="64" rx="10" fill="#ffffff" stroke="#5a3d5c" stroke-width="1.5"/>
+        <text x="442" y="120" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="13" font-weight="700" fill="#2b2730">print(count)</text>
+        <text x="442" y="142" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" fill="#6a626e">the body</text>
+        <line x1="530" y1="124" x2="612" y2="124" stroke="#6a626e" stroke-width="1.5"/>
+        <polygon points="612,118 612,130 622,124" fill="#6a626e"/>
+        <rect x="624" y="92" width="196" height="64" rx="10" fill="#e4ede6" stroke="#2f5a45" stroke-width="1.5"/>
+        <text x="722" y="120" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="12.5" font-weight="700" fill="#1d5654">count = count + 1</text>
+        <text x="722" y="142" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" fill="#6a626e">the update line</text>
+        <line x1="160" y1="156" x2="160" y2="206" stroke="#a8441f" stroke-width="1.5"/>
+        <polygon points="154,206 166,206 160,216" fill="#a8441f"/>
+        <text x="174" y="188" font-family="Segoe UI,system-ui,sans-serif" font-size="11.5" font-weight="700" fill="#a8441f">False</text>
+        <rect x="60" y="218" width="200" height="56" rx="10" fill="#f8e6dc" stroke="#a8441f" stroke-width="1.5"/>
+        <text x="160" y="242" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="12" font-weight="600" fill="#7c4324">the loop is over</text>
+        <text x="160" y="262" text-anchor="middle" font-family="Cascadia Mono,Consolas,monospace" font-size="12" fill="#7c4324">print("Done")</text>
+      </svg>
+      <div class="figcap">Fig. 1 — the only exit is the condition turning False.</div>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here</div>
+      <p>A loop that never ends is an <b>infinite loop</b>. Not a disaster — your program is doing exactly what you said, forever. All of us wrote one in our first week. <kbd>Ctrl+C</kbd> stops it; here the runner gives up after twelve seconds. So write one on purpose in P3, and the accidental one gets a shrug instead of a panic.</p>
+    </div>
+
+    <div class="worked">
+      <div class="wl">Now you run it</div>
+      <p>Five hellos, four lines. How many times is the condition asked? One more than the body runs.</p>
+      <div class="pyrun" data-id="w1">
+        <textarea spellcheck="false">count = 1
+while count <= 5:
+    print("Hello number", count)
+    count = count + 1
+print("Five hellos, four lines. Unit 2 forgiven.")</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.1 · P1</span><span class="pt">Your first loop</span></div>
+        <p class="pd">Print 1 to 4, one per line.</p>
+        <div class="want">1
+2
+3
+4</div>
+        <div class="pyrun" data-id="s1p1" data-expect="1\n2\n3\n4">
+          <textarea spellcheck="false">n = 1
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>n = 1
+while n &lt;= 4:
+    print(n)
+    n = n + 1</pre><p>Four True visits, then False at 5.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.1 · P2</span><span class="pt">Predict: the doubling dish</span></div>
+        <p class="pd">Predict on paper, then run. The update is not always <code>+ 1</code>.</p>
+        <div class="pyrun" data-id="s1p2">
+          <textarea spellcheck="false">cells = 2
+while cells < 20:
+    print(cells)
+    cells = cells * 2</textarea>
+        </div>
+        <details><summary>Show what happens &amp; why</summary><pre>2
+4
+8
+16</pre><p>16 prints: the question is asked at the <i>top</i>.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.1 · P3</span><span class="pt">The infinite loop, on purpose</span></div>
+        <p class="pd"><code>n</code> only grows, so this never ends. <b>Run it on purpose</b>, then make <code>escaped</code> print.</p>
+        <div class="pyrun" data-id="s1p3">
+          <textarea spellcheck="false">n = 1
+while n > 0:
+    n = n + 1
+print("escaped")</textarea>
+        </div>
+        <details><summary>Show the fix</summary><pre>n = 1
+while n > 0 and n &lt; 1000000:
+    n = n + 1
+print("escaped")</pre><p>Anything that turns the condition False will do.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.1 · P4</span><span class="pt">Stretch — count down by twos</span></div>
+        <p class="pd">This update subtracts. Try both <code>&gt; 0</code> and <code>&gt;= 2</code>.</p>
+        <div class="want">10
+8
+6
+4
+2</div>
+        <div class="pyrun" data-id="s1p4" data-expect="10\n8\n6\n4\n2">
+          <textarea spellcheck="false">n = 10
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>n = 10
+while n &gt; 0:
+    print(n)
+    n = n - 2</pre><p>Both work: n lands exactly on 0.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4.2 ============ -->
+  <section id="s2">
+    <div class="prose">
+      <span class="sec-num">4.2</span>
+      <h2>for + range — when you already know the number</h2>
+      <span class="rtag"><span>Read · ~2 min</span><span class="pr">Practice · ~10 min</span></span>
+      <p>Cycling home, you did not know how many pushes it would take. But plenty of jobs come with the number attached. Ten chapatis. Three cheers. Sixty seconds.</p>
+      <p>For those, a <code>while</code> makes you do clerical work — a start, a condition, an update. Three chances to slip by one.</p>
+      <p>So Python gives you a loop with the counting already inside. Plainly: <b>a while loop with the counting done for you.</b></p>
+      <p>Write <code>for i in range(5):</code> and Python makes the box <code>i</code>, refills it before every pass, and stops when the numbers run out.</p>
+      <p><code>range</code> is the number factory. Three sizes:</p>
+      <ul class="plain">
+        <li><code>range(5)</code> → <code>0 1 2 3 4</code>. Starts at 0, and 5 is not there.</li>
+        <li><code>range(2, 6)</code> → <code>2 3 4 5</code>. You say where to start.</li>
+        <li><code>range(1, 10, 2)</code> → <code>1 3 5 7 9</code>. The third number is the step. Negative counts down.</li>
+      </ul>
+      <p>Know <i>how many times</i>? Use <code>for</code>. Know only <i>when to stop</i>? That is <code>while</code> country.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">for box_name in range(5):
+    do this, once per number</div>
+      <p>No start, no condition, no update — <code>range</code> handles all three.</p>
+    </div>
+
+    <div class="listing">
+      <div class="lh">Three laps</div>
+      <ol>
+        <li><code>for lap in range(3):</code><span class="note">The factory makes 0, 1, 2 — one per pass.</span></li>
+        <li><code>    print("Lap", lap)</code><span class="note">Same line every pass. Only <code>lap</code> changes — a real box.</span></li>
+        <li><code>print("Race over")</code><span class="note">Numbers finished, loop finished.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>Lap 0
+Lap 1
+Lap 2
+Race over</div>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here</div>
+      <p><code>range(5)</code> gives five numbers, and <b>5 is not one of them</b>. Want 1 to 5? That is <code>range(1, 6)</code>.</p>
+      <p>The off-by-one has not gone. It only moved house — out of the condition, into the stop value. <i>Counts from 0, stops one short.</i></p>
+    </div>
+
+    <div class="worked">
+      <div class="wl">Watch one first</div>
+      <p>Squares of 1 to 5. We know how many times, so <code>for</code>. We want 1 to 5, so <code>range(1, 6)</code>.</p>
+      <div class="pyrun" data-id="w2">
+        <textarea spellcheck="false">for i in range(1, 6):
+    print(f"{i} squared is {i * i}")</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.2 · P1</span><span class="pt">Three cheers</span></div>
+        <p class="pd">Three times, with only one <code>print</code> line in the program.</p>
+        <div class="want">Hip hip hooray!
+Hip hip hooray!
+Hip hip hooray!</div>
+        <div class="pyrun" data-id="s2p1" data-expect="Hip hip hooray!\nHip hip hooray!\nHip hip hooray!">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>for i in range(3):
+    print("Hip hip hooray!")</pre><p>Nobody reads i. It is only the engine.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.2 · P2</span><span class="pt">Predict: three ranges</span></div>
+        <p class="pd">On paper first. Where does each one start, and where does it stop?</p>
+        <div class="pyrun" data-id="s2p2">
+          <textarea spellcheck="false">for a in range(4):
+    print(a)
+for b in range(2, 5):
+    print(b)
+for c in range(10, 0, -3):
+    print(c)</textarea>
+        </div>
+        <details><summary>Show what happens &amp; why</summary><pre>0
+1
+2
+3
+2
+3
+4
+10
+7
+4
+1</pre><p>Each stops one short: 3, then 4, then 1. The 0 never appears.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.2 · P3</span><span class="pt">Stretch — evens only, no if</span></div>
+        <p class="pd">The step does all the work. Now think hard: stop at 10 or 11?</p>
+        <div class="want">2
+4
+6
+8
+10</div>
+        <div class="pyrun" data-id="s2p3" data-expect="2\n4\n6\n8\n10">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>for n in range(2, 11, 2):
+    print(n)</pre><p>With 10 as the stop, your 10 never arrives.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4.3 ============ -->
+  <section id="s3">
+    <div class="prose">
+      <span class="sec-num">4.3</span>
+      <h2>break &amp; continue — leaving early, skipping one</h2>
+      <span class="rtag"><span>Read · ~2 min</span><span class="pr">Practice · ~10 min</span></span>
+      <p>Picture a bank counter. One queue, the clerk serving people one by one — that is your loop.</p>
+      <p>Now two ordinary things happen. One man's form is incomplete, so the clerk waves him aside and calls the next. And later the clerk finds the file he was hunting for, and simply shuts the counter.</p>
+      <p>Both are interruptions. They are not the same interruption at all.</p>
+      <ul class="plain">
+        <li><b><code>break</code> — leave the loop, now.</b> The program carries on after it.</li>
+        <li><b><code>continue</code> — abandon this pass only.</b> Back to the top, next value.</li>
+      </ul>
+      <p>Both sit inside an <code>if</code>. An unconditional <code>break</code> would fire on the very first pass, right?</p>
+      <p>And <code>break</code> unlocks <code>while True:</code> — always true, no natural end, built to be left by a break. Think of milk on the stove. You do not count stirs. You watch, and the moment it rises you take it off. That moment lives mid-work, not at the top.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">if this is the moment:
+    break        # walk out of the loop
+
+if this one is to be skipped:
+    continue     # skip the rest of this pass</div>
+    </div>
+
+    <div class="listing">
+      <div class="lh">break — the loop is over</div>
+      <ol>
+        <li><code>for n in range(1, 6):</code><span class="note">1, 2, 3, 4, 5 — that was the plan.</span></li>
+        <li><code>    if n == 4:</code><span class="note">False three times, then True.</span></li>
+        <li><code>        break</code><span class="note">The loop dies here, mid-pass.</span></li>
+        <li><code>    print(n)</code><span class="note">So it runs on the first three passes only.</span></li>
+        <li><code>print("stopped")</code><span class="note">Outside, so it still runs.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>1
+2
+3
+stopped</div>
+    </div>
+
+    <div class="listing">
+      <div class="lh">continue — one word changed</div>
+      <ol>
+        <li><code>        continue</code><span class="note">Only <i>this</i> pass is abandoned. On to 5 as usual.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>1
+2
+3
+5
+stopped</div>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here</div>
+      <p>Two slips. First, <code>break</code> does not end the program. It ends the <b>loop</b> — everything after it still runs.</p>
+      <p>Second, people swap the two. Keep the counter in your head: <code>break</code> shuts it, <code>continue</code> waves one man aside.</p>
+    </div>
+
+    <div class="worked">
+      <div class="wl">Watch one first</div>
+      <p>The first number past 100 that divides by 7. We do not know which one — but <code>%</code> tells us the moment we see it.</p>
+      <div class="pyrun" data-id="w3">
+        <textarea spellcheck="false">for n in range(101, 200):
+    if n % 7 == 0:
+        print("First multiple of 7 past 100:", n)
+        break</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.3 · P1</span><span class="pt">First big square</span></div>
+        <p class="pd">The moment <code>n * n &gt; 50</code>, print <code>n</code> and <code>break</code>.</p>
+        <div class="want">8</div>
+        <div class="pyrun" data-id="s3p1" data-expect="8">
+          <textarea spellcheck="false">for n in range(1, 20):
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>for n in range(1, 20):
+    if n * n &gt; 50:
+        print(n)
+        break</pre><p>49 slips under; 64 opens the door.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.3 · P2</span><span class="pt">Predict: the skipper</span></div>
+        <p class="pd">On paper first: which values survive, and does the loop end early?</p>
+        <div class="pyrun" data-id="s3p2">
+          <textarea spellcheck="false">for n in range(1, 8):
+    if n % 3 == 0:
+        continue
+    print(n)
+print("all done")</textarea>
+        </div>
+        <details><summary>Show what happens &amp; why</summary><pre>1
+2
+4
+5
+7
+all done</pre><p>Only the print is skipped. All seven passes still run.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.3 · P3</span><span class="pt">Stretch — stop at the meeting point</span></div>
+        <p class="pd">The first number divisible by <b>both</b> 2 and 3 ends the show.</p>
+        <div class="want">1
+2
+3
+4
+5
+found 6</div>
+        <div class="pyrun" data-id="s3p3" data-expect="1\n2\n3\n4\n5\nfound 6">
+          <textarea spellcheck="false">for n in range(1, 11):
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>for n in range(1, 11):
+    if n % 2 == 0 and n % 3 == 0:
+        print("found", n)
+        break
+    print(n)</pre><p>Check before print, or 6 appears as a plain number first.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4.4 ============ -->
+  <section id="s4">
+    <div class="prose">
+      <span class="sec-num">4.4</span>
+      <h2>Counters &amp; accumulators — loops that build an answer</h2>
+      <span class="rtag"><span>Read · ~2 min</span><span class="pr">Practice · ~10 min</span></span>
+      <p>So far our loops print and forget. Each pass sees one value and throws it away.</p>
+      <p>But the real questions have one answer at the end. What is the total of these bills? How many students passed?</p>
+      <p>So let's try to understand how one answer survives many passes.</p>
+      <p>Watch the vegetable vendor weigh your bag. Potatoes, forty — he says forty. Tomatoes, thirty — seventy. Onions, twenty-five — ninety-five. Nothing is written down. He carries one running number in his head, and every item goes into it.</p>
+      <p>That running number is a box that outlives the loop. Make it <b>before</b>, feed it <b>inside</b>, read it <b>after</b>.</p>
+      <p>Feed it <code>+ 1</code> instead of a value and it becomes a tally. Put that line under an <code>if</code> and you count only the ones that qualify.</p>
+      <p>We call that box an <b>accumulator</b> — and when it only counts, a <b>counter</b>.</p>
+    </div>
+
+    <div class="syntax">
+      <div class="sl">The form</div>
+      <div class="form">total = 0                 # before — the empty jar
+for x in ...:
+    total = total + x     # inside — each pass drops a coin in
+print(total)              # after — the jar holds the answer</div>
+    </div>
+
+    <div class="listing">
+      <div class="lh">Add up 1, 2, 3, 4</div>
+      <ol>
+        <li><code>total = 0</code><span class="note">The jar, on the counter before anybody arrives.</span></li>
+        <li><code>for n in range(1, 5):</code><span class="note">n is 1, then 2, then 3, then 4.</span></li>
+        <li><code>    total = total + n</code><span class="note">Right side first: 1, then 3, then 6, then 10.</span></li>
+        <li><code>print(total)</code><span class="note">After the loop. One answer, not four.</span></li>
+      </ol>
+      <div class="yousee"><b>What you should see</b>10</div>
+    </div>
+
+    <div class="confuse">
+      <div class="lbl">Careful here</div>
+      <p>Putting <code>total = 0</code> <b>inside</b> the loop is the classic slip. Nothing goes red — the program just hands you a wrong answer with a straight face.</p>
+      <p>The jar is emptied at the top of every pass, so it holds only the last value. If your total equals the final number, move the init line above the loop.</p>
+    </div>
+    <div class="aside">
+      <div class="lbl">A shorthand you will meet in the wild</div>
+      <code>total += x</code> means exactly <code>total = total + x</code>. Same for <code>-=</code> and <code>*=</code>. These notes keep the long form, because it shows the machinery.
+    </div>
+
+    <div class="worked">
+      <div class="wl">Watch one first</div>
+      <p>Four scores. Two jars, both made before the loop. One is fed every pass, the other only when the <code>if</code> agrees.</p>
+      <div class="pyrun" data-id="w4" data-stdin="62\n38\n71\n50">
+        <textarea spellcheck="false">total = 0
+passed = 0
+for i in range(4):
+    score = int(input("Score? "))
+    total = total + score
+    if score >= 50:
+        passed = passed + 1
+print("Total:", total)
+print("Passed:", passed)</textarea>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.4 · P1</span><span class="pt">The little sum</span></div>
+        <p class="pd">Add up 1 to 10 with one jar. The answer ends in 5.</p>
+        <div class="want">55</div>
+        <div class="pyrun" data-id="s4p1" data-expect="55">
+          <textarea spellcheck="false">total = 0
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>total = 0
+for n in range(1, 11):
+    total = total + n
+print(total)</pre><p>The print sits outside the loop.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.4 · P2</span><span class="pt">Count the evens</span></div>
+        <p class="pd">Ask <code>Number? </code> five times, converting at the door, and count the even ones.</p>
+        <div class="want">Number? 7
+Number? 12
+Number? 9
+Number? 4
+Number? 10
+Even numbers: 3</div>
+        <div class="pyrun" data-id="s4p2" data-stdin="7\n12\n9\n4\n10" data-stdin-lock data-expect="Number? 7\nNumber? 12\nNumber? 9\nNumber? 4\nNumber? 10\nEven numbers: 3">
+          <textarea spellcheck="false">evens = 0
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>evens = 0
+for i in range(5):
+    n = int(input("Number? "))
+    if n % 2 == 0:
+        evens = evens + 1
+print("Even numbers:", evens)</pre><p>The jar gets a coin only when the if agrees.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.4 · P3</span><span class="pt">Stretch — king of the hill</span></div>
+        <p class="pd">Report the highest of three, without <code>max()</code>. Inputs fixed: 34, 78, 56.</p>
+        <div class="want">Score? 34
+Score? 78
+Score? 56
+Highest: 78</div>
+        <div class="pyrun" data-id="s4p3" data-stdin="34\n78\n56" data-stdin-lock data-expect="Score? 34\nScore? 78\nScore? 56\nHighest: 78">
+          <textarea spellcheck="false">biggest = 0
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>biggest = 0
+for i in range(3):
+    score = int(input("Score? "))
+    if score &gt; biggest:
+        biggest = score
+print("Highest:", biggest)</pre><p>Not an addition this time — a replacement, and only when the challenger wins.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4.5 BUILD ============ -->
+  <section id="s5">
+    <div class="prose">
+      <span class="sec-num">4.5</span>
+      <h2>Your build — guess my number, v2</h2>
+      <span class="rtag"><span>Read · ~1 min</span><span class="pr">Practice · ~12 min</span></span>
+      <p>Unit 3's game judged one guess and finished. That is not a game — it is a decision in a game's clothes.</p>
+      <p>Version 2 is the real thing, and it is this whole unit in one program. A <code>while</code> holding the tries, <code>if/elif/else</code> giving hints inside it, and a <code>break</code> at the win.</p>
+      <p>Then a gentler one, to let <code>for</code> show off.</p>
+    </div>
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.5 · P1</span><span class="pt">The game, complete</span></div>
+        <p class="pd">Secret is <code>7</code>, three tries. Ask, convert at the door, count the try, then judge.</p>
+        <div class="want">Your guess? 3
+Too low.
+Your guess? 9
+Too high.
+Your guess? 7
+Got it in 3 tries!</div>
+        <div class="pyrun" data-id="s5p1" data-stdin="3\n9\n7" data-stdin-lock data-expect="Your guess? 3\nToo low.\nYour guess? 9\nToo high.\nYour guess? 7\nGot it in 3 tries!">
+          <textarea spellcheck="false">secret = 7
+tries = 0
+while tries < 3:
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>secret = 7
+tries = 0
+while tries &lt; 3:
+    guess = int(input("Your guess? "))
+    tries = tries + 1
+    if guess == secret:
+        print(f"Got it in {tries} tries!")
+        break
+    elif guess &lt; secret:
+        print("Too low.")
+    else:
+        print("Too high.")</pre><p>Count the try <i>before</i> you judge, or the winning message is short by one.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">4.5 · P2</span><span class="pt">The times-table printer</span></div>
+        <p class="pd">One f-string does a line, <code>for</code> does the rest. Keep the number in a box <code>n</code>.</p>
+        <div class="want">7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35
+7 x 6 = 42
+7 x 7 = 49
+7 x 8 = 56
+7 x 9 = 63
+7 x 10 = 70</div>
+        <div class="pyrun" data-id="s5p2" data-expect="7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63\n7 x 10 = 70">
+          <textarea spellcheck="false">n = 7
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>n = 7
+for i in range(1, 11):
+    print(f"{n} x {i} = {n * i}")</pre><p>Now change n to 13 and print a table no schoolbook wall ever carried.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4.6 PROBLEM BANK ============ -->
+  <section id="s6">
+    <div class="prose">
+      <span class="sec-num">4.6</span>
+      <h2>Problem bank — everything at once</h2>
+      <span class="rtag"><span class="pr">Practice · ~12 min</span></span>
+      <p>Nothing new. Both loops, both doors, jars of every kind. In order — they get meaner.</p>
+    </div>
+    <div class="practice">
+      <div class="p-card">
+        <div class="ph"><span class="pn">B1</span><span class="pt">The countdown</span></div>
+        <p class="pd">Either loop works. Pick one, then work out how you would have written the other.</p>
+        <div class="want">5
+4
+3
+2
+1
+Liftoff!</div>
+        <div class="pyrun" data-id="b1" data-expect="5\n4\n3\n2\n1\nLiftoff!">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>for n in range(5, 0, -1):
+    print(n)
+print("Liftoff!")</pre><p>Liftoff! is un-indented, or the rocket launches five times.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">B2</span><span class="pt">The famous sum</span></div>
+        <p class="pd">Add every number from 1 to 100. Gauss was clever about it; you get to be lazy.</p>
+        <div class="want">5050</div>
+        <div class="pyrun" data-id="b2" data-expect="5050">
+          <textarea spellcheck="false"></textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>total = 0
+for n in range(1, 101):
+    total = total + n
+print(total)</pre><p>Gauss paired 1+100, 2+99 — fifty pairs of 101. Your loop would do a million just as calmly.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">B3</span><span class="pt">The average machine</span></div>
+        <p class="pd">Keep asking until <code>-1</code> arrives — a <b>sentinel</b>. Do not count it. Average to two decimals.</p>
+        <div class="want">Score (-1 to stop)? 40
+Score (-1 to stop)? 70
+Score (-1 to stop)? 55
+Score (-1 to stop)? -1
+Average: 55.00</div>
+        <div class="pyrun" data-id="b3" data-stdin="40\n70\n55\n-1" data-stdin-lock data-expect="Score (-1 to stop)? 40\nScore (-1 to stop)? 70\nScore (-1 to stop)? 55\nScore (-1 to stop)? -1\nAverage: 55.00">
+          <textarea spellcheck="false">total = 0
+count = 0
+while True:
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>total = 0
+count = 0
+while True:
+    score = int(input("Score (-1 to stop)? "))
+    if score == -1:
+        break
+    total = total + score
+    count = count + 1
+print(f"Average: {total / count:.2f}")</pre><p>Milk on the stove — the stopping moment appears mid-work, so <code>while True</code> plus <code>break</code>.</p></details>
+      </div>
+      <div class="p-card">
+        <div class="ph"><span class="pn">B4</span><span class="pt">Stretch — the digit shredder</span></div>
+        <p class="pd">Add the digits of <code>4728</code>: <code>% 10</code> peels off the last digit, <code>// 10</code> shreds it away.</p>
+        <div class="want">Digit sum: 21</div>
+        <div class="pyrun" data-id="b4" data-expect="Digit sum: 21">
+          <textarea spellcheck="false">n = 4728
+total = 0
+</textarea>
+        </div>
+        <details><summary>Show solution</summary><pre>n = 4728
+total = 0
+while n &gt; 0:
+    total = total + n % 10
+    n = n // 10
+print("Digit sum:", total)</pre><p>Here the update line is a division. Anything that drives the condition towards False will do.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUICK REFERENCE ============ -->
+  <section id="cheat">
+    <div class="prose">
+      <h2>Quick reference</h2>
+      <p>Everything from today, on one screen. Come back to this page for this box alone.</p>
+    </div>
+    <div class="cheat">
+      <h4>Repeating while something is true</h4>
+      <table>
+        <tr><td><code>while count &lt;= 3:</code></td><td>ask at the top; run the body; come back and ask again</td></tr>
+        <tr><td><code>count = 1</code></td><td>the start — made before the loop</td></tr>
+        <tr><td><code>count = count + 1</code></td><td>the update — inside, or the loop never ends</td></tr>
+      </table>
+      <h4>Repeating a known number of times</h4>
+      <table>
+        <tr><td><code>for i in range(5):</code></td><td>five passes; i is 0, 1, 2, 3, 4</td></tr>
+        <tr><td><code>range(2, 6)</code></td><td>2, 3, 4, 5 — starts where you say</td></tr>
+        <tr><td><code>range(1, 10, 2)</code></td><td>1, 3, 5, 7, 9 — the third number is the step</td></tr>
+        <tr><td><code>range(5, 0, -1)</code></td><td>5, 4, 3, 2, 1 — a negative step counts down</td></tr>
+        <tr><td>the rule</td><td><b>counts from 0 and stops one short</b></td></tr>
+      </table>
+      <h4>Getting out</h4>
+      <table>
+        <tr><td><code>break</code></td><td>leave the loop now — the program continues after it</td></tr>
+        <tr><td><code>continue</code></td><td>skip the rest of this pass only; the loop carries on</td></tr>
+        <tr><td><code>while True:</code></td><td>a loop with no natural end, built to be left by a break</td></tr>
+      </table>
+      <h4>Building one answer</h4>
+      <table>
+        <tr><td><code>total = 0</code></td><td>before the loop — the empty jar</td></tr>
+        <tr><td><code>total = total + x</code></td><td>inside — every pass drops a coin in</td></tr>
+        <tr><td><code>count = count + 1</code></td><td>inside, often under an if — a tally instead of a sum</td></tr>
+        <tr><td><code>print(total)</code></td><td>after the loop — one answer, not many</td></tr>
+      </table>
+      <h4>When it will not stop</h4>
+      <table>
+        <tr><td><kbd>Ctrl+C</kbd></td><td>stops a runaway loop in a terminal</td></tr>
+        <tr><td>on this page</td><td>the runner gives up on its own after ~12 seconds</td></tr>
+        <tr><td>the habit</td><td><b>draw the loop table</b></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz">
+    <div class="prose">
+      <h2>Check yourself</h2>
+      <p>Six questions. A wrong answer here is worth more than a right one — read the explanation either way.</p>
+    </div>
+    <div class="stack" id="quiz-box"></div>
+    <div class="score" id="quiz-score" hidden></div>
+  </section>
+
+  <!-- ============ GLOSSARY ============ -->
+  <section id="gloss">
+    <div class="prose">
+      <h2>Glossary</h2>
+      <p>Every word from today that you will need again.</p>
+    </div>
+    <dl class="gloss" id="gloss-list"></dl>
+  </section>
+
+  <!-- ============ NEXT ============ -->
+  <section>
+    <div class="next">
+      <div class="lbl">Before you go to Unit 5</div>
+      <h3>Go and break a loop or two</h3>
+      <p style="font-size:var(--fs-cap);color:var(--slate)">Take the guessing game from 4.5 and make it yours. Give the player five tries. Make it rude when he guesses too high. Then break it on purpose. Remove the update line and watch it spin. Move <code>total = 0</code> inside a loop and see the wrong answer arrive with a straight face. Fix them both — you will learn more from those two than from ten copied programs.</p>
+      <p style="font-size:var(--fs-cap);color:var(--slate);margin-top:10px">Then in <b>Unit 5</b> we fix the squeeze you must have felt today. A box holds one thing, so fifty scores meant fifty asks and nothing was kept. Unit 5 gives you the <b>list</b> — many values in one labelled box. And the loops you just learned were built for exactly this.</p>
+      <p style="font-size:var(--fs-cap);color:var(--slate);margin-top:10px"><i>One question before you go. Your loop asked for five scores, one after another. At the end of it, how many of those five were still in memory?</i></p>
+    </div>
+  </section>
+
+  <!-- ============ REFERENCES ============ -->
+  <section class="lwa-refs" id="refs">
+    <div class="prose">
+      <h2>References</h2>
+      <p>Where to read more on today's ground, in the order I would read them.</p>
+    </div>
+    <ol>
+      <li><b>The Python Tutorial</b> — <i>§4.2–4.4: for, range, break and continue</i>. <span class="why">The official walk over this unit's exact ground, with more range examples.</span> <a href="https://docs.python.org/3/tutorial/controlflow.html" rel="noopener">docs.python.org</a></li>
+      <li><b>Sweigart, A.</b> — <i>Automate the Boring Stuff with Python, ch. 2 (Flow Control)</i>. <span class="why">Free online. The same four ideas with flowcharts — a second angle on the loop cycle.</span> <a href="https://automatetheboringstuff.com/2e/chapter2/" rel="noopener">book</a></li>
+      <li><b>Python documentation</b> — <i>Built-in Functions: range()</i>. <span class="why">The full contract of the number factory — start, stop, step, and "stops one short" in official ink.</span> <a href="https://docs.python.org/3/library/functions.html#func-range" rel="noopener">docs.python.org</a></li>
+      <li><b>The Python Tutorial</b> — <i>§3.2 First Steps Towards Programming</i>. <span class="why">The tutorial's own first while loop — three lines that compute the Fibonacci series. Worth a loop table.</span> <a href="https://docs.python.org/3/tutorial/introduction.html" rel="noopener">docs.python.org</a></li>
+    </ol>
+  </section>
+
+  <section class="keep" aria-label="Follow along"><p class="follow">New chapters and episodes come out every week. Follow along on <a href="https://www.youtube.com/@learn-ai-by-building" rel="noopener">YouTube</a> or the <a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp channel</a>.</p></section>
+  <div class="lwa-chapnav">
+    <a href="unit3.html"><span class="k">← Previous</span><span class="t">Unit 3 · Making decisions — comparisons &amp; if/else</span></a>
+    <button type="button" class="lwa-complete" data-lwa-complete><span class="k">Progress</span><span class="t">Mark this unit complete</span></button>
+    <a href="unit5.html"><span class="k">Next →</span><span class="t">Unit 5 · Many things at once — lists</span></a>
+  </div>
+
+  </main>
+</div>
+
+<footer class="nav2-foot"><div class="fi">
+  <a href="../../index.html"><img src="../../assets/wordmark.svg?v=2" alt="Learn AI by Building — home"></a>
+  <nav aria-label="Footer"><a href="../../index.html">Home</a><a href="../../series/index.html">Series</a><a href="../../blog/index.html">Blog</a><a href="../../connect.html">Connect</a><a href="https://www.youtube.com/@learn-ai-by-building" rel="noopener">YouTube</a><a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp</a><a href="../../privacy.html">Privacy</a></nav>
+  <span class="by">Learn AI by Building · by Adi (Aditya)</span>
+</div></footer>
+
+<script>
+"use strict";
+/* ============ Quiz ============ */
+const QUIZ = [
+  {q:"A loop must run exactly 10 times. Which tool fits most naturally?",
+   o:["while True with a break on the tenth pass","for i in range(10)","A while loop with a counter you start, check and update yourself","Ten copies of the body, pasted"],
+   a:1,
+   e:"You know the number before you start, so use for. The while version works, but it hands you three separate chances to be off by one. Keep while for 'I only know when to stop'."},
+  {q:"What happens if the body of  while count <= 3:  never changes count?",
+   o:["Python refuses to run the program","The loop runs three times anyway","The condition never turns False, so the loop runs forever","The loop runs once and stops"],
+   a:2,
+   e:"The condition can only say stop if something inside is moving it there. That is the update line's whole job. Without it: an infinite loop, and about twelve patient seconds before the runner here gives up."},
+  {q:"What numbers does range(5) produce?",
+   o:["1, 2, 3, 4, 5","0, 1, 2, 3, 4, 5","0, 1, 2, 3, 4","5, 4, 3, 2, 1"],
+   a:2,
+   e:"It counts from 0 and stops one short. Five numbers, and 5 is never one of them. Want 1 to 5? That is range(1, 6)."},
+  {q:"What does  for i in range(2, 9, 3): print(i)  produce?",
+   o:["2 3 4 5 6 7 8","2 5 8","2 5 8 11","3 6 9"],
+   a:1,
+   e:"Start at 2, jump by 3, stop before 9. The next jump would land on 11, past the stop, so the factory never makes it."},
+  {q:"Inside a loop, break vs continue — what is the difference?",
+   o:["They do the same thing","break skips one pass; continue leaves the loop","break leaves the whole loop immediately; continue skips the rest of this pass and goes on to the next","Both end the program"],
+   a:2,
+   e:"Remember the bank counter. break is shutting the counter and going home — but the program carries on after the loop. continue is waving one man aside and calling the next."},
+  {q:"In the sum pattern, where must  total = 0  live — and why?",
+   o:["Inside the loop, so the jar is fresh each pass","Before the loop — inside, it would empty the jar at the top of every pass","After the loop, next to the print","Anywhere; Python reorders it"],
+   a:1,
+   e:"Make it before, feed it inside, read it after. Put the init inside and every pass starts from 0 again. No error — just a total that mysteriously equals the last value added."}
+];
+const quizBox = document.getElementById("quiz-box");
+const scoreEl = document.getElementById("quiz-score");
+let answered = 0, correct = 0;
+QUIZ.forEach((item,qi)=>{
+  const card = document.createElement("div");
+  card.className = "q-card";
+  card.innerHTML = "<div class='qq'>"+(qi+1)+". "+item.q+"</div>";
+  const opts = document.createElement("div");
+  opts.className = "opts";
+  item.o.forEach((text,oi)=>{
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "opt"; b.textContent = text;
+    b.addEventListener("click",()=>{
+      if(card.dataset.done) return;
+      card.dataset.done = "1";
+      answered++;
+      if(oi === item.a) correct++;
+      [...opts.children].forEach((el,j)=>{
+        el.disabled = true;
+        if(j === item.a) el.classList.add("right");
+        else if(j === oi) el.classList.add("wrong");
+      });
+      const ex = document.createElement("div");
+      ex.className = "explain";
+      ex.innerHTML = (oi === item.a ? "<b>Correct.</b> " : "<b>Not quite.</b> ") + item.e;
+      card.appendChild(ex);
+      if(answered === QUIZ.length){
+        scoreEl.hidden = false;
+        scoreEl.textContent = "You scored "+correct+" out of "+QUIZ.length+
+          (correct === QUIZ.length ? " — every one. Your programs repeat themselves now, so you never have to."
+           : correct >= 4 ? " — solid. The loop table in 4.1 and the jar in 4.4 carry all the weight; read those two again."
+           : " — worth one more lap through the practice above before Unit 5.");
+      }
+    });
+    opts.appendChild(b);
+  });
+  card.appendChild(opts);
+  quizBox.appendChild(card);
+});
+
+/* ============ Glossary ============ */
+const GLOSSARY = [
+  ["while loop","Asks its condition; if True, runs the indented body, then comes back and asks again. Ends only when the answer turns False, or a break fires."],
+  ["Condition","The True/False question after while — the same comparisons as Unit 3. Asked at the top of every pass, never mid-pass."],
+  ["Update line","The line inside a while body that changes something the condition reads. Forget it and the loop never ends."],
+  ["Infinite loop","A loop whose condition never turns False. Not dangerous, only endless. Ctrl+C in a terminal, about twelve patient seconds here."],
+  ["for loop","A while loop with the counting done for you: for i in range(5) runs the body once per number, and stops on its own."],
+  ["range()","The number factory. range(5) gives 0 to 4, range(2, 6) gives 2 to 5, range(10, 0, -2) counts down. Counts from 0 and stops one short."],
+  ["Loop variable","The box named after for — the i — which range refills before each pass. A real box: read it, square it, print it."],
+  ["Iteration","One trip around the loop: one check plus one run of the body. One row of the loop table."],
+  ["break","Leave the loop immediately, even mid-pass. The program carries on after the loop."],
+  ["continue","Abandon the rest of this pass only, and go back to the top for the next value. The loop keeps going."],
+  ["Accumulator","A box made before the loop that the body keeps feeding. Make it before, feed it inside, read it after. A counter is the same box fed + 1."],
+  ["Sentinel","A special value, like -1, whose only job is to say 'stop asking'. Read until it arrives, then break. The natural home of while True."]
+];
+document.getElementById("gloss-list").innerHTML = GLOSSARY.map(([t,d])=>
+  "<div class='gcard'><dt>"+t+"</dt><dd>"+d+"</dd></div>").join("");
+
+/* ============ Scrollspy ============ */
+const links = [...document.querySelectorAll(".rail a")];
+const targets = links.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean);
+function syncRail(){
+  const line = window.innerHeight * 0.28;
+  let active = targets[0];
+  for(const t of targets){
+    if(t.getBoundingClientRect().top <= line) active = t;
+  }
+  if(window.innerHeight + window.scrollY >= document.body.scrollHeight - 4){
+    active = targets[targets.length-1];
+  }
+  links.forEach(a=>a.classList.toggle("on", a.getAttribute("href") === "#"+active.id));
+}
+let ticking = false;
+addEventListener("scroll",()=>{
+  if(ticking) return;
+  ticking = true;
+  requestAnimationFrame(()=>{ syncRail(); ticking = false; });
+},{passive:true});
+addEventListener("resize", syncRail);
+syncRail();
+
+</script>
+<script src="../../assets/site-config.js"></script>
+<script src="../../assets/analytics.js?v=1" defer></script>
+<script src="../../assets/progress.js?v=3"></script>
+<script src="../../assets/unitnav.js?v=1"></script>
+<script src="../../assets/pyrun.js?v=3"></script>
+<script src="../../assets/stepper.js?v=3"></script>
+<script src="../../assets/spark.js?v=4" defer></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="canonical" href="https://learnwithadi.com/privacy.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — Learn AI by Building</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css?v=8">
+<style>
+body{margin:0;background:var(--lwa-ground);color:var(--lwa-ink);font-family:var(--lwa-sans);line-height:1.65}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+header.top{background:#3a1620;border-bottom:0}   /* the maroon top bar of the home page (20 Oct 2026) */
+header.top .lwa-home img{height:48px;width:auto;display:block}
+header.top .lwa-tag,header.top .lwa-tag a{color:#faf6ee;text-decoration:none}
+header.top .lwa-tag a:hover{color:#e3a63a}
+@media (max-width:640px){header.top .lwa-home img{height:40px}}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
+h1{font-family:var(--lwa-serif);font-size:30px;margin:40px 0 8px}
+h2{font-family:var(--lwa-serif);font-size:20px;margin:26px 0 6px}
+p,li{font-size:14.5px;color:var(--lwa-slate)}
+footer{margin-top:56px;border-top:1px solid var(--lwa-line);padding:20px 0;font-size:13px;color:var(--lwa-muted)}
+a{color:var(--lwa-accent)}
+</style>
+<link rel="stylesheet" href="assets/nav.css?v=1">
+</head>
+<body>
+<header class="top nav2"><div class="top-in">
+  <a class="lwa-home" href="index.html"><img src="assets/wordmark-maroon.svg?v=1" alt="Learn AI by Building — home"></a>
+  <nav class="nav2-links" aria-label="Main"><a href="index.html">Home</a><a href="series/index.html">Series</a><a href="blog/index.html">Blog</a><a href="connect.html">Connect</a></nav>
+  <span class="nav2-auth" data-lwa-auth></span>
+  <details class="nav2-menu"><summary>Menu</summary><div class="m"><a href="index.html">Home</a><a href="series/index.html">Series</a><a href="blog/index.html">Blog</a><a href="connect.html">Connect</a><a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp channel</a><span class="nav2-auth-m" data-lwa-auth></span></div></details>
+</div></header>
+<div class="wrap">
+  <h1>Privacy, in plain words</h1>
+  <p>This site is a set of free study pages. It has no ads and no cookies. It counts visits in a simple way that does not identify you.</p>
+
+  <h2>What we count</h2>
+  <p>We count visits with <a href="https://www.goatcounter.com" rel="noopener">GoatCounter</a>, a small open-source counter. It counts two things, and nothing else.</p>
+  <ul>
+    <li><b>Page views.</b> Which page was opened, and when.</li>
+    <li><b>Practice runs.</b> One count each time a practice block runs without an error. It names the page and the block. Your code and its output are never sent.</li>
+  </ul>
+  <p>Each count also notes a few general facts. These are the link you came from, your browser and system, and your screen width. They also include your language and your country, worked out from your IP address. GoatCounter keeps only totals of these.</p>
+  <p>It never stores your IP address. It holds your IP address and browser in memory for up to 8 hours. That tells new visits from repeat ones. Then it forgets them. Nothing is written to disk.</p>
+  <p>No cookies are set, and nothing is saved in your browser. That is why there is no cookie banner. Counts are never linked to your sign-in. GoatCounter shares nothing with anyone else. Its own policy is <a href="https://www.goatcounter.com/help/privacy" rel="noopener">here</a>.</p>
+
+  <h2>If you don't sign in</h2>
+  <p>Your reading progress and quiz scores are stored only in your own browser (<code>localStorage</code>). They never leave your machine. Clearing your browser data clears them.</p>
+
+  <h2>If you sign in</h2>
+  <p>Sign-in uses Google via <a href="https://supabase.com" rel="noopener">Supabase</a>, solely so your learning journey can follow you across devices. What gets stored: your Google account's basic identity (name, email, avatar) and your progress records (which chapters you've completed, quiz scores, how far you've scrolled). Nothing else. You can sign out at any time; ask and your stored data will be deleted.</p>
+
+  <h2>The study assistant (when it arrives)</h2>
+  <p>The on-page assistant will run on an API key <b>you</b> provide. The key is stored in your browser only and sent only to the model provider (Google) with your questions and the relevant chapter excerpts. It never touches our servers — we don't have any.</p>
+</div>
+<footer class="nav2-foot"><div class="fi">
+  <a href="index.html"><img src="assets/wordmark.svg?v=2" alt="Learn AI by Building — home"></a>
+  <nav aria-label="Footer"><a href="index.html">Home</a><a href="series/index.html">Series</a><a href="blog/index.html">Blog</a><a href="connect.html">Connect</a><a href="https://www.youtube.com/@learn-ai-by-building" rel="noopener">YouTube</a><a href="https://whatsapp.com/channel/0029VbBmUYHADTOID6uURl2U" rel="noopener">WhatsApp</a><a href="privacy.html">Privacy</a></nav>
+  <span class="by">Learn AI by Building · by Adi (Aditya)</span>
+</div></footer>
+<script src="assets/analytics.js?v=1" defer></script>
+</body>
+</html>
